@@ -8,6 +8,7 @@ import { OTPModule } from './modules/otp.module';
 import { ConfigModule } from '@nestjs/config';
 import { ServerConfigModule } from './modules/server-config.module';
 import { MicrosoftAuthModule } from './modules/microsoft-auth.module';
+import { ExternalAccountControllerModule } from './controllers/external/account/external-account-controller.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { MicrosoftAuthModule } from './modules/microsoft-auth.module';
     OTPModule,
     AccountControllerModule,
     AuthControllerModule,
+    ExternalAccountControllerModule,
   ],
   controllers: [],
   providers: [],

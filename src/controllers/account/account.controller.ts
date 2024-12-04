@@ -19,6 +19,7 @@ import {
   ApiParam,
   ApiQuery,
   ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import { AccountService } from 'src/models/account/account.service';
 import {
@@ -34,6 +35,7 @@ import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
 import { Constants } from 'src/config';
 
 @Controller('accounts')
+@ApiTags('Internal', 'Account')
 @UseGuards(
   JWTAuthGuard,
   new CheckAccountTypeGuard(Constants.Account.AccountTypes.Admin),
@@ -97,7 +99,7 @@ export class AccountController {
   @ApiOperation({ summary: 'get account details' })
   @ApiParam({
     name: 'id',
-    type: Number,
+    type: String,
     description: 'ID',
   })
   @ApiOkResponse({

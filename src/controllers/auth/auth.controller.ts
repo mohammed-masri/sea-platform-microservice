@@ -33,7 +33,7 @@ import { Op } from 'sequelize';
 import { AuthorizedRequest } from 'src/common/global.dto';
 
 @Controller('auth')
-@ApiTags('Auth')
+@ApiTags('Internal', 'Auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
