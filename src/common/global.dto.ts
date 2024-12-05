@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional, Min } from 'class-validator';
-import { Constants } from 'src/config';
 
 export class ArrayDataResponse<T> {
   @ApiProperty({ type: Number })
@@ -23,13 +22,6 @@ export class ArrayDataResponse<T> {
     this.totalPages = 0;
     if (limit !== 0) this.totalPages = Math.ceil(totalCount / limit);
   }
-}
-
-export class AuthorizedRequest extends Request {
-  context: {
-    id: string;
-    type: Constants.Account.AccountTypes;
-  };
 }
 
 export class FindAllDto {

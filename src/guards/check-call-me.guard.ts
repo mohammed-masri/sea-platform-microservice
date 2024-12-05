@@ -4,8 +4,9 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { AuthorizedRequest } from 'src/common/global.dto';
+import { Common } from 'sea-backend-helpers';
 
 import { ServerConfigService } from 'src/models/server-config/server-config.service';
 
@@ -16,7 +17,9 @@ export class CheckCallMe implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request: AuthorizedRequest = context.switchToHttp().getRequest();
+    const request: Common.DTO.AuthorizedRequest & Request = context
+      .switchToHttp()
+      .getRequest();
 
     const authorization = (request.headers as any).authorization;
 

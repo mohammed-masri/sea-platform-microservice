@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { AuthorizedRequest } from 'src/common/global.dto';
+import { Common } from 'sea-backend-helpers';
 
 import { Constants } from 'src/config';
 
@@ -19,7 +19,9 @@ export class CheckAccountTypeGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request: AuthorizedRequest = context.switchToHttp().getRequest();
+    const request: Common.DTO.AuthorizedRequest = context
+      .switchToHttp()
+      .getRequest();
 
     const { type } = request.context;
 

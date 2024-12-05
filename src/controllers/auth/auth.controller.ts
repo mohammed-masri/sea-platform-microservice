@@ -30,7 +30,7 @@ import { JWTAuthGuard } from 'src/guards/jwt-auth.guard';
 import { AccountService } from 'src/models/account/account.service';
 import { OTPService } from 'src/models/otp/otp.service';
 import { Op } from 'sequelize';
-import { AuthorizedRequest } from 'src/common/global.dto';
+import { Common } from 'sea-backend-helpers';
 
 @Controller('auth')
 @ApiTags('Internal', 'Auth')
@@ -71,7 +71,9 @@ export class AuthController {
     type: AccountResponse,
   })
   @ApiUnauthorizedResponse({ description: 'Invalid token' })
-  async fetchLoggedAccountDetails(@Request() req: AuthorizedRequest) {
+  async fetchLoggedAccountDetails(
+    @Request() req: Common.DTO.AuthorizedRequest,
+  ) {
     const accountId = req.context.id;
     const account = await this.accountService.checkIsFound({
       where: { id: accountId },
@@ -88,7 +90,7 @@ export class AuthController {
   })
   @ApiUnauthorizedResponse({ description: 'Invalid token' })
   async updateLoggedAccountDetails(
-    @Request() req: AuthorizedRequest,
+    @Request() req: Common.DTO.AuthorizedRequest,
     @Body() body: UpdateMyAccountDto,
   ) {
     const accountId = req.context.id;
@@ -109,7 +111,7 @@ export class AuthController {
   @ApiBadRequestResponse({ description: 'Old password is incorrect.' })
   @ApiUnauthorizedResponse({ description: 'Invalid token' })
   async changeMyPassword(
-    @Request() req: AuthorizedRequest,
+    @Request() req: Common.DTO.AuthorizedRequest,
     @Body() body: ChangeMyPasswordDto,
   ) {
     const accountId = req.context.id;

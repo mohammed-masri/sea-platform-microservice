@@ -5,8 +5,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { AuthorizedRequest } from 'src/common/global.dto';
+import { Common } from 'sea-backend-helpers';
 
 import { ServerConfigService } from 'src/models/server-config/server-config.service';
 
@@ -20,7 +21,9 @@ export class JWTAuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request: AuthorizedRequest = context.switchToHttp().getRequest();
+    const request: Common.DTO.AuthorizedRequest & Request = context
+      .switchToHttp()
+      .getRequest();
 
     const authorization = (request.headers as any).authorization;
 
@@ -39,7 +42,11 @@ export class JWTAuthGuard implements CanActivate {
         secret: JWT_SECRET,
       });
 
-      request.context = { id: payload.id, type: payload.type };
+      request.context = {
+        id: payload.id,
+        type: payload.type,
+        account: undefined,
+      };
 
       return true;
     } catch (error: any) {
