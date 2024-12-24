@@ -8,11 +8,13 @@ import {
   BeforeUpdate,
   HasMany,
   Default,
+  ForeignKey,
 } from 'sequelize-typescript';
 import { Utils } from 'sea-backend-helpers';
 
 import { OTP } from '../otp/otp.model';
 import { Constants } from 'src/config';
+import { AccountType } from '../account-type/account-type.model';
 
 @Table({
   tableName: 'accounts',
@@ -65,12 +67,6 @@ export class Account extends Model {
   password: string;
 
   @Column({
-    type: DataType.ENUM(...Object.values(Constants.Account.AccountTypes)),
-    allowNull: false,
-  })
-  type: Constants.Account.AccountTypes;
-
-  @Column({
     type: DataType.DATE,
     allowNull: true,
   })
@@ -84,6 +80,16 @@ export class Account extends Model {
 
   @HasMany(() => OTP)
   OTPs: OTP[];
+
+  @ForeignKey(() => AccountType)
+  @Column(DataType.UUID)
+  typeId: string;
+
+  @Column({
+    type: DataType.ENUM(...Object.values(Constants.Account.AccountTypes)),
+    allowNull: false,
+  })
+  type: Constants.Account.AccountTypes;
 
   @BeforeCreate
   @BeforeUpdate

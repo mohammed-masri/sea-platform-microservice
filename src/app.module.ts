@@ -9,6 +9,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ServerConfigModule } from './modules/server-config.module';
 import { MicrosoftAuthModule } from './modules/microsoft-auth.module';
 import { ExternalAccountControllerModule } from './controllers/external/account/external-account-controller.module';
+import { AccountTypeModule } from './modules/account-type.module';
+import { SeederControllerModule } from './controllers/seeder/seeder-controller.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { ExternalAccountControllerModule } from './controllers/external/account/
     AccountControllerModule,
     AuthControllerModule,
     ExternalAccountControllerModule,
+    AccountTypeModule,
+    SeederControllerModule,
   ],
   controllers: [],
   providers: [],

@@ -11,6 +11,7 @@ import { Op } from 'sequelize';
 import { MicrosoftAuthService } from '../microsoft-auth/microsoft-auth.service';
 import { Account } from '../account/account.model';
 import { ServerConfigService } from '../server-config/server-config.service';
+import { AccountTypeService } from '../account-type/account-type.service';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
     private readonly accountService: AccountService,
     private readonly microsoftAuthService: MicrosoftAuthService,
     private readonly serverConfigService: ServerConfigService,
+    private readonly accountTypeService: AccountTypeService,
   ) {}
 
   private async signToken(account: Account) {
@@ -81,11 +83,20 @@ export class AuthService {
     });
 
     if (!account) {
-      account = await this.accountService.create({
-        name,
-        email,
-        type: Constants.Account.AccountTypes.User,
+      // The account type will be User by default when login by microsoft
+      const accountType = await this.accountTypeService.checkIsFound({
+        where: {
+          key: Constants.Account.AccountTypes.User,
+        },
       });
+      account = await this.accountService.create(
+        {
+          name,
+          email,
+          type: Constants.Account.AccountTypes.User,
+        },
+        accountType.id,
+      );
     }
 
     if (account.isLocked)
