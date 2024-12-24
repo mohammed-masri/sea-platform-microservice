@@ -65,8 +65,9 @@ export class CreateAccountDto {
     example: '2000-01-01',
     required: false,
   })
-  @IsOptional()
+  @IsOptional({})
   @IsDateString()
+  @Transform(({ value }) => (value === '' ? null : value))
   birthDate?: Date;
 }
 
@@ -128,7 +129,8 @@ export class UpdateAccountDto {
     example: '2000-01-01',
     required: false,
   })
-  @IsOptional()
+  @IsOptional({})
   @IsDateString()
+  @Transform(({ value }) => (value === '' ? null : value))
   birthDate?: Date;
 }
