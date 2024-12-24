@@ -74,8 +74,10 @@ export class AccountService {
   }
 
   async create(data: Attributes<Account>) {
-    await this.checkPhoneNumberRegistered(data.phoneNumber);
-    await this.checkEmailRegistered(data.email);
+    await Promise.all([
+      this.checkPhoneNumberRegistered(data.phoneNumber),
+      this.checkEmailRegistered(data.email),
+    ]);
 
     const account = new Account({ ...data });
     return account.save();
