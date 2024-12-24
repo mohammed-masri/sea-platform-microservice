@@ -5,6 +5,7 @@ import {
   Post,
   Put,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -31,6 +32,7 @@ import { AccountService } from 'src/models/account/account.service';
 import { OTPService } from 'src/models/otp/otp.service';
 import { Op } from 'sequelize';
 import { Common } from 'sea-backend-helpers';
+import { Response } from 'express';
 
 @Controller('auth')
 @ApiTags('Internal', 'Auth')
@@ -48,8 +50,9 @@ export class AuthController {
     type: LoginResponse,
   })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
-  async login(@Body() body: LoginDto) {
-    return this.authService.login(body);
+  async login(@Body() body: LoginDto, @Res() response: Response) {
+    const loginData = await this.authService.login(body);
+    return response.send(loginData);
   }
 
   @Post('/microsoft/login')
