@@ -5,7 +5,9 @@ import {
   PrimaryKey,
   DataType,
   Default,
+  HasMany,
 } from 'sequelize-typescript';
+import { Account } from '../account/account.model';
 
 @Table({
   tableName: 'account-types',
@@ -42,4 +44,7 @@ export class AccountType extends Model {
     },
   })
   name: string;
+
+  @HasMany(() => Account, 'typeId')
+  accounts: Account[];
 }

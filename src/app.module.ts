@@ -11,6 +11,8 @@ import { MicrosoftAuthModule } from './modules/microsoft-auth.module';
 import { ExternalAccountControllerModule } from './controllers/external/account/external-account-controller.module';
 import { AccountTypeModule } from './modules/account-type.module';
 import { SeederControllerModule } from './controllers/seeder/seeder-controller.module';
+import { PermissionModule } from './modules/permission.module';
+import { StaticControllerModule } from './controllers/static/static.module';
 
 @Module({
   imports: [
@@ -28,6 +30,8 @@ import { SeederControllerModule } from './controllers/seeder/seeder-controller.m
     ExternalAccountControllerModule,
     AccountTypeModule,
     SeederControllerModule,
+    PermissionModule,
+    StaticControllerModule,
   ],
   controllers: [],
   providers: [],
