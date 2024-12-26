@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -11,6 +12,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
@@ -125,6 +127,28 @@ export class RoleController {
     });
     role = await this.roleService.update(role, data, permissions);
 
+    const roleResponse = await this.roleService.makeRoleFullResponse(role);
+    return roleResponse;
+  }
+
+  @Delete('/:id')
+  @ApiOperation({ summary: 'delete role (force delete)' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'ID of the role to delete',
+  })
+  @ApiNoContentResponse({
+    description: 'Role successfully force deleted',
+    type: RoleFullResponse,
+  })
+  @ApiNotFoundResponse({ description: 'Role not found' })
+  async delete(@Param('id') id: string) {
+    const role = await this.roleService.checkIsFound({
+      where: { id },
+      include: [RolePermission],
+    });
+    await this.roleService.delete(role);
     const roleResponse = await this.roleService.makeRoleFullResponse(role);
     return roleResponse;
   }

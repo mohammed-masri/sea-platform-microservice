@@ -120,4 +120,21 @@ export class RoleService {
 
     return new RoleFullResponse(role, permissionsResponse);
   }
+
+  async delete(role: Role) {
+    // TODO
+    // check if there are any account has it
+
+    const rolePermissions = role.rolePermissions
+      ? role.rolePermissions
+      : await this.permissionService.findAllForRole(role.id);
+
+    await Promise.all(
+      rolePermissions.map((p) =>
+        this.permissionService.deleteRolePermission(p),
+      ),
+    );
+
+    return await role.destroy({ force: true });
+  }
 }
