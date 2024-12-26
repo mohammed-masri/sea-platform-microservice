@@ -1,4 +1,5 @@
-export enum AdminPermissionKeys {
+export enum PermissionKeys {
+  // Admin
   ManageAccounts = 'manage-accounts',
   ManageAccountsRead = 'manage-accounts-read',
   ManageAccountsCreate = 'manage-accounts-create',
@@ -9,58 +10,94 @@ export enum AdminPermissionKeys {
   ManageRolesCreate = 'manage-roles-create',
   ManageRolesUpdateDetails = 'manage-roles-update-details',
   ManageRolesDelete = 'manage-roles-delete',
+
+  // User
+  ContractsApp = 'contracts-app',
+  ContractsAppManageContracts = 'contracts-app-manage-contracts',
+  ContractsAppManageContractsRead = 'contracts-app-manage-contracts-read',
+  ContractsAppManageContractsCreate = 'contracts-app-manage-contracts-create',
+  ContractsAppManageContractsUpdateDetails = 'contracts-app-manage-contracts-update-details',
+  ContractsAppManageContractsDelete = 'contracts-app-manage-contracts-delete',
 }
-export enum UserPermissionKeys {}
 
 export interface IPermission {
   name: string;
-  key: AdminPermissionKeys | UserPermissionKeys;
+  key: PermissionKeys;
   children?: IPermission[] | undefined;
 }
 
-export const USER_PERMISSIONS: IPermission[] = [];
+export const USER_PERMISSIONS: IPermission[] = [
+  {
+    key: PermissionKeys.ContractsApp,
+    name: 'Contract App',
+    children: [
+      {
+        key: PermissionKeys.ContractsAppManageContracts,
+        name: 'Manage My Contracts',
+        children: [
+          {
+            key: PermissionKeys.ContractsAppManageContractsRead,
+            name: 'Read My Contracts',
+          },
+          {
+            key: PermissionKeys.ContractsAppManageContractsCreate,
+            name: 'Create Contract',
+          },
+          {
+            key: PermissionKeys.ContractsAppManageContractsUpdateDetails,
+            name: 'Update Contract',
+          },
+          {
+            key: PermissionKeys.ContractsAppManageContractsDelete,
+            name: 'Delete Contract',
+          },
+        ],
+      },
+    ],
+  },
+];
 
 export const ADMIN_PERMISSIONS: IPermission[] = [
   {
-    key: AdminPermissionKeys.ManageAccounts,
+    key: PermissionKeys.ManageAccounts,
     name: 'Manage Account',
     children: [
       {
-        key: AdminPermissionKeys.ManageAccountsRead,
+        key: PermissionKeys.ManageAccountsRead,
         name: 'Read Accounts',
       },
       {
-        key: AdminPermissionKeys.ManageAccountsCreate,
+        key: PermissionKeys.ManageAccountsCreate,
         name: 'Create Account',
       },
       {
-        key: AdminPermissionKeys.ManageAccountsUpdateDetails,
+        key: PermissionKeys.ManageAccountsUpdateDetails,
         name: 'Update Account Details',
       },
       {
-        key: AdminPermissionKeys.ManageAccountsChangePassword,
+        key: PermissionKeys.ManageAccountsChangePassword,
         name: 'Change Account Password',
       },
     ],
   },
   {
-    key: AdminPermissionKeys.ManageRoles,
+    key: PermissionKeys.ManageRoles,
     name: 'Manage Roles',
     children: [
       {
-        key: AdminPermissionKeys.ManageRolesRead,
+        key: PermissionKeys.ManageRolesRead,
         name: 'Read Roles',
       },
       {
-        key: AdminPermissionKeys.ManageRolesCreate,
+        key: PermissionKeys.ManageRolesCreate,
         name: 'Create Roles',
       },
       {
-        key: AdminPermissionKeys.ManageRolesUpdateDetails,
+        key: PermissionKeys.ManageRolesUpdateDetails,
         name: 'Update Role Details',
       },
       {
-        key: AdminPermissionKeys.ManageRolesDelete,
+        key: PermissionKeys.ManageRolesDelete,
         name: 'Delete Role',
       },
     ],

@@ -6,9 +6,7 @@ export class PermissionResponse {
   @ApiProperty()
   name: string;
   @ApiProperty()
-  key:
-    | Constants.Permission.AdminPermissionKeys
-    | Constants.Permission.UserPermissionKeys;
+  key: Constants.Permission.PermissionKeys;
 
   @ApiProperty({ type: Boolean })
   isLeaf: boolean;
@@ -45,9 +43,7 @@ export class PermissionResponseForRole {
   @ApiProperty()
   name: string;
   @ApiProperty()
-  key:
-    | Constants.Permission.AdminPermissionKeys
-    | Constants.Permission.UserPermissionKeys;
+  key: Constants.Permission.PermissionKeys;
 
   @ApiProperty({ type: Boolean })
   isLeaf: boolean;

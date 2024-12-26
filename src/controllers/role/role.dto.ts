@@ -13,10 +13,7 @@ import { IsArrayValuesIn } from 'src/decorators/is-array-values-in.decorator';
 import { Constants } from 'src/config';
 import { RoleShortResponse } from 'src/models/role/role.dto';
 
-const permissionKeys = [
-  ...Object.values(Constants.Permission.AdminPermissionKeys),
-  ...Object.values(Constants.Permission.UserPermissionKeys),
-];
+const permissionKeys = [...Object.values(Constants.Permission.PermissionKeys)];
 
 export class CreateRoleDto {
   @ApiProperty({
