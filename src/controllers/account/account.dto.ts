@@ -8,11 +8,13 @@ import {
   IsPhoneNumber,
   MinLength,
   MaxLength,
+  IsEnum,
 } from 'class-validator';
 import { AccountResponse } from 'src/models/account/account.dto';
 
 import { Utils } from 'sea-backend-helpers';
 import { ArrayDataResponse } from 'src/common/global.dto';
+import { Constants } from 'src/config';
 
 export class CreateAccountDto {
   @ApiProperty({
@@ -42,9 +44,11 @@ export class CreateAccountDto {
   @IsPhoneNumber()
   phoneNumber: string;
 
-  @ApiProperty()
-  @IsString()
-  typeId: string;
+  @ApiProperty({
+    enum: Constants.Account.AccountTypes,
+  })
+  @IsEnum(Constants.Account.AccountTypes)
+  type: Constants.Account.AccountTypes;
 
   @ApiProperty({
     description: 'Password for the account account (min length: 8 characters)',

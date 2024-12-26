@@ -3,7 +3,8 @@ import { OTP } from 'src/models/otp/otp.model';
 import { ServerConfigService } from 'src/models/server-config/server-config.service';
 import { Account } from 'src/models/account/account.model';
 import { CONSTANTS } from 'sea-backend-helpers';
-import { AccountType } from 'src/models/account-type/account-type.model';
+import { Role } from 'src/models/role/role.model';
+import { RolePermission } from 'src/models/permission/role-permission.model';
 
 export const databaseProviders = [
   {
@@ -27,7 +28,7 @@ export const databaseProviders = [
         dialect: 'mysql',
         ...ConnectionConfig,
       });
-      sequelize.addModels([Account, AccountType, OTP]);
+      sequelize.addModels([Account, OTP, Role, RolePermission]);
       await sequelize.sync();
       return sequelize;
     },

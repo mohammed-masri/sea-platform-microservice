@@ -15,8 +15,6 @@ export class AccountResponse {
   @ApiProperty()
   type: Constants.Account.AccountTypes;
   @ApiProperty()
-  typeId: string;
-  @ApiProperty()
   birthDate: string;
   @ApiProperty({ type: Boolean })
   isLocked: boolean;
@@ -27,7 +25,6 @@ export class AccountResponse {
     this.email = account.email;
     this.phoneNumber = account.phoneNumber;
     this.type = account.type;
-    this.typeId = account.typeId;
     this.birthDate = null;
     if (account.birthDate) {
       this.birthDate = Utils.Moment.formatData(account.birthDate, 'YYYY-MM-DD');

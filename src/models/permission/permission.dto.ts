@@ -6,7 +6,9 @@ export class PermissionResponse {
   @ApiProperty()
   name: string;
   @ApiProperty()
-  key: Constants.Permission.PermissionKeys;
+  key:
+    | Constants.Permission.AdminPermissionKeys
+    | Constants.Permission.UserPermissionKeys;
 
   @ApiProperty({ type: Boolean })
   isLeaf: boolean;
@@ -30,5 +32,41 @@ export class AllPermissionResponse {
   constructor(User: PermissionResponse[], Admin: PermissionResponse[]) {
     this.Admin = Admin;
     this.User = User;
+  }
+}
+
+export enum PermissionChecked {
+  None = 'none',
+  Some = 'some',
+  All = 'all',
+}
+
+export class PermissionResponseForRole {
+  @ApiProperty()
+  name: string;
+  @ApiProperty()
+  key:
+    | Constants.Permission.AdminPermissionKeys
+    | Constants.Permission.UserPermissionKeys;
+
+  @ApiProperty({ type: Boolean })
+  isLeaf: boolean;
+
+  @ApiProperty({ enum: PermissionChecked })
+  checked: PermissionChecked;
+
+  @ApiProperty({ type: PermissionResponse, isArray: true, nullable: true })
+  children: PermissionResponseForRole[] | undefined;
+
+  constructor(
+    permission: IPermission,
+    children: PermissionResponseForRole[],
+    checked: PermissionChecked,
+  ) {
+    this.name = permission.name;
+    this.key = permission.key;
+    this.isLeaf = !children || !children?.length;
+    this.checked = checked;
+    this.children = children;
   }
 }

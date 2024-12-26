@@ -33,8 +33,6 @@ import { FindAllDto } from 'src/common/global.dto';
 import { JWTAuthGuard } from 'src/guards/jwt-auth.guard';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
 import { Constants } from 'src/config';
-import { AccountTypeService } from 'src/models/account-type/account-type.service';
-import { AccountTypeResponse } from 'src/models/account-type/account-type.dto';
 
 @Controller('accounts')
 @ApiTags('Internal', 'Account')
@@ -43,22 +41,7 @@ import { AccountTypeResponse } from 'src/models/account-type/account-type.dto';
   new CheckAccountTypeGuard(Constants.Account.AccountTypes.Admin),
 )
 export class AccountController {
-  constructor(
-    private readonly accountService: AccountService,
-    private readonly accountTypeService: AccountTypeService,
-  ) {}
-
-  @Get('/types')
-  @ApiOperation({ summary: 'fetch account types' })
-  @ApiResponse({
-    status: 200,
-    description: 'Retrieve account types',
-    type: AccountTypeResponse,
-    isArray: true,
-  })
-  async getAccountTypes() {
-    return await this.accountTypeService.fetchAllAccountTypes();
-  }
+  constructor(private readonly accountService: AccountService) {}
 
   @Post()
   @ApiOperation({ summary: 'Create a new account' })
@@ -68,7 +51,7 @@ export class AccountController {
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   async create(@Body() data: CreateAccountDto) {
-    const account = await this.accountService.create(data, data.typeId);
+    const account = await this.accountService.create(data);
     const AccountResponse =
       await this.accountService.makeAccountResponse(account);
     return AccountResponse;

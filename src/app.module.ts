@@ -9,10 +9,11 @@ import { ConfigModule } from '@nestjs/config';
 import { ServerConfigModule } from './modules/server-config.module';
 import { MicrosoftAuthModule } from './modules/microsoft-auth.module';
 import { ExternalAccountControllerModule } from './controllers/external/account/external-account-controller.module';
-import { AccountTypeModule } from './modules/account-type.module';
 import { SeederControllerModule } from './controllers/seeder/seeder-controller.module';
 import { PermissionModule } from './modules/permission.module';
 import { StaticControllerModule } from './controllers/static/static.module';
+import { RoleModule } from './modules/role.module';
+import { RoleControllerModule } from './controllers/role/role-controller.module';
 
 @Module({
   imports: [
@@ -28,10 +29,11 @@ import { StaticControllerModule } from './controllers/static/static.module';
     AccountControllerModule,
     AuthControllerModule,
     ExternalAccountControllerModule,
-    AccountTypeModule,
     SeederControllerModule,
     PermissionModule,
     StaticControllerModule,
+    RoleModule,
+    RoleControllerModule,
   ],
   controllers: [],
   providers: [],

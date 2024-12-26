@@ -5,14 +5,12 @@ import { AccountService } from 'src/models/account/account.service';
 import { accountProviders } from 'src/models/account/account.provider';
 import { JwtService } from '@nestjs/jwt';
 import { ServerConfigService } from 'src/models/server-config/server-config.service';
-import { AccountTypeModuleDependencies } from 'src/modules/account-type.module';
 
 @Module({
   controllers: [AccountController],
   providers: [
     AccountService,
     ...accountProviders,
-    ...AccountTypeModuleDependencies.providers,
     JwtService,
     ServerConfigService,
   ],

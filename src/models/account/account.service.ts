@@ -11,14 +11,12 @@ import { Attributes, FindOptions } from 'sequelize';
 import { AccountResponse } from './account.dto';
 import { Op } from 'sequelize';
 import { Utils } from 'sea-backend-helpers';
-import { AccountTypeService } from '../account-type/account-type.service';
 
 @Injectable()
 export class AccountService {
   constructor(
     @Inject(Constants.Database.DatabaseRepositories.AccountRepository)
     private accountRepository: typeof Account,
-    private readonly accountTypeService: AccountTypeService,
   ) {}
 
   async findAll(
@@ -75,17 +73,14 @@ export class AccountService {
     }
   }
 
-  async create(data: Attributes<Account>, typeId: string) {
-    const [accountType, ,] = await Promise.all([
-      this.accountTypeService.checkIsFound({ where: { id: typeId } }),
+  async create(data: Attributes<Account>) {
+    await Promise.all([
       this.checkPhoneNumberRegistered(data.phoneNumber),
       this.checkEmailRegistered(data.email),
     ]);
 
     const account = new Account({
       ...data,
-      type: accountType.key,
-      typeId: accountType.id,
     });
     return account.save();
   }

@@ -1,22 +1,20 @@
-export type AdminPermissionKeys =
-  | 'manage-accounts'
-  | 'manage-accounts-read'
-  | 'manage-accounts-create'
-  | 'manage-accounts-change-password'
-  | 'manage-accounts-update-details'
-  | 'manage-roles'
-  | 'manage-roles-read'
-  | 'manage-roles-create'
-  | 'manage-roles-update-details'
-  | 'manage-roles-delete';
-
-export type UserPermissionKeys = '';
-
-export type PermissionKeys = AdminPermissionKeys | UserPermissionKeys;
+export enum AdminPermissionKeys {
+  ManageAccounts = 'manage-accounts',
+  ManageAccountsRead = 'manage-accounts-read',
+  ManageAccountsCreate = 'manage-accounts-create',
+  ManageAccountsChangePassword = 'manage-accounts-change-password',
+  ManageAccountsUpdateDetails = 'manage-accounts-update-details',
+  ManageRoles = 'manage-roles',
+  ManageRolesRead = 'manage-roles-read',
+  ManageRolesCreate = 'manage-roles-create',
+  ManageRolesUpdateDetails = 'manage-roles-update-details',
+  ManageRolesDelete = 'manage-roles-delete',
+}
+export enum UserPermissionKeys {}
 
 export interface IPermission {
   name: string;
-  key: PermissionKeys;
+  key: AdminPermissionKeys | UserPermissionKeys;
   children?: IPermission[] | undefined;
 }
 
@@ -24,47 +22,49 @@ export const USER_PERMISSIONS: IPermission[] = [];
 
 export const ADMIN_PERMISSIONS: IPermission[] = [
   {
-    key: 'manage-accounts',
+    key: AdminPermissionKeys.ManageAccounts,
     name: 'Manage Account',
     children: [
       {
-        key: 'manage-accounts-read',
+        key: AdminPermissionKeys.ManageAccountsRead,
         name: 'Read Accounts',
       },
       {
-        key: 'manage-accounts-create',
+        key: AdminPermissionKeys.ManageAccountsCreate,
         name: 'Create Account',
       },
       {
-        key: 'manage-accounts-update-details',
+        key: AdminPermissionKeys.ManageAccountsUpdateDetails,
         name: 'Update Account Details',
       },
       {
-        key: 'manage-accounts-change-password',
+        key: AdminPermissionKeys.ManageAccountsChangePassword,
         name: 'Change Account Password',
       },
     ],
   },
   {
-    key: 'manage-roles',
+    key: AdminPermissionKeys.ManageRoles,
     name: 'Manage Roles',
     children: [
       {
-        key: 'manage-roles-read',
+        key: AdminPermissionKeys.ManageRolesRead,
         name: 'Read Roles',
       },
       {
-        key: 'manage-roles-create',
+        key: AdminPermissionKeys.ManageRolesCreate,
         name: 'Create Roles',
       },
       {
-        key: 'manage-roles-update-details',
+        key: AdminPermissionKeys.ManageRolesUpdateDetails,
         name: 'Update Role Details',
       },
       {
-        key: 'manage-roles-delete',
-        name: 'Change Role Password',
+        key: AdminPermissionKeys.ManageRolesDelete,
+        name: 'Delete Role',
       },
     ],
   },
 ];
+
+export const PERMISSIONS = [...USER_PERMISSIONS, ...ADMIN_PERMISSIONS];
