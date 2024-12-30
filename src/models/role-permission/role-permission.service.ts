@@ -55,16 +55,19 @@ export class RolePermissionService {
     return rolePermissions;
   }
 
-  async updateForRole(keys: Constants.Permission.PermissionKeys[], role: Role) {
-    await this.permissionService.checkAreLeafKeys(keys);
+  async updateKeysForRole(
+    role: Role,
+    newKeys: Constants.Permission.PermissionKeys[],
+  ) {
+    await this.permissionService.checkAreLeafKeys(newKeys);
 
     // Fetch current role permissions from the database
     const rolePermissions = await this.findAllForRole(role.id);
     const currentKeys = rolePermissions.map((p) => p.permissionKey);
 
     // Determine keys to add and remove
-    const keysToAdd = keys.filter((key) => !currentKeys.includes(key));
-    const keysToRemove = currentKeys.filter((key) => !keys.includes(key));
+    const keysToAdd = newKeys.filter((key) => !currentKeys.includes(key));
+    const keysToRemove = currentKeys.filter((key) => !newKeys.includes(key));
 
     // Add new role permissions
     if (keysToAdd.length > 0) {

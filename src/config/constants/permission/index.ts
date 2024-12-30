@@ -79,6 +79,10 @@ export const ADMIN_PERMISSIONS: IPermission[] = [
         key: PermissionKeys.ManageAccountsChangePassword,
         name: 'Change Account Password',
       },
+      {
+        key: PermissionKeys.ManageAccountsDelete,
+        name: 'Delete Account',
+      },
     ],
   },
   {

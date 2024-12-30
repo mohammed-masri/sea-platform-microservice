@@ -139,7 +139,7 @@ export class RoleController {
     type: RoleFullResponse,
   })
   @ApiNotFoundResponse({ description: 'Role not found' })
-  async updateAccountDetails(
+  async updateRoleDetails(
     @Param('id') id: string,
     @Body() body: UpdateRoleDto,
   ) {

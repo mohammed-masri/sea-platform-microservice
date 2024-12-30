@@ -60,7 +60,19 @@ export class RoleService {
   ) {
     role = await role.update({ ...data });
 
-    await this.rolePermissionService.updateForRole(permissionKeys, role);
+    await this.rolePermissionService.updateKeysForRole(role, permissionKeys);
+
+    // update the account permissions for all accounts has this role
+    const accounts = await this.getAccounts(role);
+    await Promise.all(
+      accounts.map((a) =>
+        this.accountPermissionService.updateKeysForAccount(
+          a,
+          role,
+          permissionKeys,
+        ),
+      ),
+    );
 
     return role;
   }
