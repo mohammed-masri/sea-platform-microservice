@@ -49,8 +49,12 @@ export class AccountPermissionService {
     const keysToAdd = newKeys.filter((key) => !currentKeys.includes(key));
     const keysToRemove = currentKeys.filter((key) => !newKeys.includes(key));
 
+    let permissionsHasBeenChanged = false;
+
     // Add new account permissions
     if (keysToAdd.length > 0) {
+      permissionsHasBeenChanged = true;
+
       await Promise.all(
         keysToAdd.map((key) =>
           this.create({
@@ -64,11 +68,16 @@ export class AccountPermissionService {
 
     // Remove unnecessary account permissions
     if (keysToRemove.length > 0) {
+      permissionsHasBeenChanged = true;
       const permissionsToRemove = accountPermissions.filter((p) =>
         keysToRemove.includes(p.permissionKey),
       );
 
       await Promise.all(permissionsToRemove.map((p) => this.delete(p)));
+    }
+
+    if (permissionsHasBeenChanged) {
+      // TODO: invalid the JWTs for this account
     }
   }
 }
