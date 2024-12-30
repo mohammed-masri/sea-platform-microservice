@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { AccountService } from 'src/models/account/account.service';
 
-import { AccountResponse } from 'src/models/account/account.dto';
+import { AccountFullResponse } from 'src/models/account/account.dto';
 import { CheckCallMe } from 'src/guards/check-call-me.guard';
 
 @Controller('external/accounts')
@@ -26,13 +26,13 @@ export class ExternalAccountController {
   })
   @ApiOkResponse({
     description: 'Account fetched successfully',
-    type: AccountResponse,
+    type: AccountFullResponse,
   })
   @ApiNotFoundResponse({ description: 'Account not found' })
   async fetchAccountDetails(@Param('id') id: string) {
     const account = await this.accountService.checkIsFound({ where: { id } });
     const AccountResponse =
-      await this.accountService.makeAccountResponse(account);
+      await this.accountService.makeAccountFullResponse(account);
     return AccountResponse;
   }
 }

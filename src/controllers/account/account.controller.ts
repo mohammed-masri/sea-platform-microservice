@@ -28,7 +28,7 @@ import {
   UpdateAccountDto,
   AccountArrayDataResponse,
 } from './account.dto';
-import { AccountResponse } from 'src/models/account/account.dto';
+import { AccountFullResponse } from 'src/models/account/account.dto';
 import { FindAllDto } from 'src/common/global.dto';
 import { JWTAuthGuard } from 'src/guards/jwt-auth.guard';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
@@ -48,14 +48,14 @@ export class AccountController {
   @ApiOperation({ summary: 'Create a new account' })
   @ApiCreatedResponse({
     description: 'The account has been successfully created.',
-    type: AccountResponse,
+    type: AccountFullResponse,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   async create(@Body() body: CreateAccountDto) {
     const { roleIds, ...data } = body;
     const account = await this.accountService.create(data, roleIds);
     const AccountResponse =
-      await this.accountService.makeAccountResponse(account);
+      await this.accountService.makeAccountFullResponse(account);
     return AccountResponse;
   }
 
@@ -88,7 +88,7 @@ export class AccountController {
     );
 
     const accountsResponse =
-      await this.accountService.makeAccountsResponse(accounts);
+      await this.accountService.makeAccountsShortResponse(accounts);
 
     return new AccountArrayDataResponse(
       totalCount,
@@ -107,13 +107,13 @@ export class AccountController {
   })
   @ApiOkResponse({
     description: 'Account fetched successfully',
-    type: AccountResponse,
+    type: AccountFullResponse,
   })
   @ApiNotFoundResponse({ description: 'Account not found' })
   async fetchAccountDetails(@Param('id') id: string) {
     const account = await this.accountService.checkIsFound({ where: { id } });
     const AccountResponse =
-      await this.accountService.makeAccountResponse(account);
+      await this.accountService.makeAccountFullResponse(account);
     return AccountResponse;
   }
 
@@ -126,7 +126,7 @@ export class AccountController {
   })
   @ApiOkResponse({
     description: 'Account updated successfully',
-    type: AccountResponse,
+    type: AccountFullResponse,
   })
   @ApiNotFoundResponse({ description: 'Account not found' })
   async updateAccountDetails(
@@ -144,7 +144,7 @@ export class AccountController {
       include: [Role],
     });
     const AccountResponse =
-      await this.accountService.makeAccountResponse(account);
+      await this.accountService.makeAccountFullResponse(account);
     return AccountResponse;
   }
 
@@ -177,13 +177,13 @@ export class AccountController {
   })
   @ApiOkResponse({
     description: 'the lock status has been changed successfully',
-    type: AccountResponse,
+    type: AccountFullResponse,
   })
   @ApiNotFoundResponse({ description: 'Account not found' })
   async toggleLock(@Param('id') id: string) {
     let account = await this.accountService.checkIsFound({ where: { id } });
     account = await this.accountService.toggleLockStatus(account);
-    return await this.accountService.makeAccountResponse(account);
+    return await this.accountService.makeAccountFullResponse(account);
   }
 
   @Delete('/:id')
@@ -195,14 +195,14 @@ export class AccountController {
   })
   @ApiNoContentResponse({
     description: 'Account successfully soft deleted',
-    type: AccountResponse,
+    type: AccountFullResponse,
   })
   @ApiNotFoundResponse({ description: 'Account not found' })
   async delete(@Param('id') id: string) {
     const account = await this.accountService.checkIsFound({ where: { id } });
     await this.accountService.delete(account);
     const AccountResponse =
-      await this.accountService.makeAccountResponse(account);
+      await this.accountService.makeAccountFullResponse(account);
     return AccountResponse;
   }
 }

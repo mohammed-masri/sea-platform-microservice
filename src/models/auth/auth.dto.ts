@@ -1,13 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AccountResponse } from '../account/account.dto';
+import { AccountFullResponse } from '../account/account.dto';
 
 export class LoginResponse {
   @ApiProperty()
   accessToken: string;
-  @ApiProperty({ type: AccountResponse })
-  account: AccountResponse;
+  @ApiProperty({ type: AccountFullResponse })
+  account: AccountFullResponse;
 
-  constructor(accessToken: string, account: AccountResponse) {
+  constructor(accessToken: string, account: AccountFullResponse) {
     this.accessToken = accessToken;
     this.account = account;
   }

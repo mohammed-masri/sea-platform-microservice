@@ -11,11 +11,11 @@ import {
   IsEnum,
   IsArray,
 } from 'class-validator';
-import { AccountResponse } from 'src/models/account/account.dto';
 
 import { Utils } from 'sea-backend-helpers';
 import { ArrayDataResponse } from 'src/common/global.dto';
 import { Constants } from 'src/config';
+import { AccountShortResponse } from 'src/models/account/account.dto';
 
 export class CreateAccountDto {
   @ApiProperty({
@@ -81,12 +81,12 @@ export class CreateAccountDto {
   roleIds: string[];
 }
 
-export class AccountArrayDataResponse extends ArrayDataResponse<AccountResponse> {
-  @ApiProperty({ type: AccountResponse, isArray: true })
-  data: AccountResponse[];
+export class AccountArrayDataResponse extends ArrayDataResponse<AccountShortResponse> {
+  @ApiProperty({ type: AccountShortResponse, isArray: true })
+  data: AccountShortResponse[];
   constructor(
     totalCount: number,
-    data: Array<AccountResponse>,
+    data: Array<AccountShortResponse>,
     page: number,
     limit: number,
   ) {

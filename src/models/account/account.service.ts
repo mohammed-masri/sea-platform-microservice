@@ -8,12 +8,12 @@ import {
 import { Account } from './account.model';
 import { Constants } from 'src/config';
 import { Attributes, FindOptions } from 'sequelize';
-import { AccountResponse } from './account.dto';
 import { Op } from 'sequelize';
 import { Utils } from 'sea-backend-helpers';
 import { RoleService } from '../role/role.service';
 import { Role } from '../role/role.model';
 import { RolePermissionService } from '../role-permission/role-permission.service';
+import { AccountFullResponse, AccountShortResponse } from './account.dto';
 
 @Injectable()
 export class AccountService {
@@ -186,7 +186,7 @@ export class AccountService {
     return true;
   }
 
-  async makeAccountResponse(account: Account) {
+  async makeAccountShortResponse(account: Account) {
     let roles: Role[] = [];
     if (account.roles && account.roles.length) roles = account.roles;
     else {
@@ -199,19 +199,29 @@ export class AccountService {
 
     const rolesResponse = await this.roleService.makeRolesShortResponse(roles);
 
-    const roleIds = roles.map((r) => r.id);
+    return new AccountShortResponse(account, rolesResponse);
+  }
+
+  async makeAccountFullResponse(account: Account) {
+    const accountResponse = await this.makeAccountShortResponse(account);
+
+    const roleIds = accountResponse.roles.map((r) => r.id);
     const rolePermissions =
       await this.rolePermissionService.findAllForRoles(roleIds);
     const permissionKeys = rolePermissions.map((p) => p.permissionKey);
 
-    return new AccountResponse(account, rolesResponse, permissionKeys);
+    return new AccountFullResponse(
+      account,
+      accountResponse.roles,
+      permissionKeys,
+    );
   }
 
-  async makeAccountsResponse(accounts: Account[]) {
-    const accountsResponse: AccountResponse[] = [];
+  async makeAccountsShortResponse(accounts: Account[]) {
+    const accountsResponse: AccountShortResponse[] = [];
     for (let i = 0; i < accounts.length; i++) {
       const account = accounts[i];
-      const AccountResponse = await this.makeAccountResponse(account);
+      const AccountResponse = await this.makeAccountShortResponse(account);
       accountsResponse.push(AccountResponse);
     }
     return accountsResponse;

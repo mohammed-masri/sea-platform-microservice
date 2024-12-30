@@ -6,7 +6,7 @@ import { LoginDto, MicrosoftLoginDto } from 'src/controllers/auth/auth.dto';
 import { Utils } from 'sea-backend-helpers';
 import { Constants, JWTConfig } from 'src/config';
 import { LoginResponse } from './auth.dto';
-import { AccountResponse } from '../account/account.dto';
+import { AccountFullResponse } from '../account/account.dto';
 import { Op } from 'sequelize';
 import { MicrosoftAuthService } from '../microsoft-auth/microsoft-auth.service';
 import { ServerConfigService } from '../server-config/server-config.service';
@@ -20,7 +20,7 @@ export class AuthService {
     private readonly serverConfigService: ServerConfigService,
   ) {}
 
-  private async signToken(account: AccountResponse) {
+  private async signToken(account: AccountFullResponse) {
     const JWT_SECRET = this.serverConfigService.get<string>('JWT_SECRET') || '';
     const token = this.jwtService.sign(
       {
@@ -65,7 +65,7 @@ export class AuthService {
       throw new UnauthorizedException('The account has been locked!');
 
     const accountResponse =
-      await this.accountService.makeAccountResponse(account);
+      await this.accountService.makeAccountFullResponse(account);
 
     const token = await this.signToken(accountResponse);
 
@@ -100,14 +100,14 @@ export class AuthService {
       throw new UnauthorizedException('The account has been locked!');
 
     const accountResponse =
-      await this.accountService.makeAccountResponse(account);
+      await this.accountService.makeAccountFullResponse(account);
 
     const token = await this.signToken(accountResponse);
 
     return this.makeLoginResponse(token, accountResponse);
   }
 
-  makeLoginResponse(accessToken: string, account: AccountResponse) {
+  makeLoginResponse(accessToken: string, account: AccountFullResponse) {
     return new LoginResponse(accessToken, account);
   }
 }

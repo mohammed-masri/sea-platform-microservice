@@ -4,7 +4,7 @@ import { Constants } from 'src/config';
 import { Utils } from 'sea-backend-helpers';
 import { RoleShortResponse } from '../role/role.dto';
 
-export class AccountResponse {
+export class AccountShortResponse {
   @ApiProperty({ type: String })
   id: string;
   @ApiProperty()
@@ -21,14 +21,8 @@ export class AccountResponse {
   isLocked: boolean;
   @ApiProperty({ type: RoleShortResponse, isArray: true })
   roles: RoleShortResponse[];
-  @ApiProperty({ enum: Constants.Permission.PermissionKeys, isArray: true })
-  permissionKeys: Constants.Permission.PermissionKeys[];
 
-  constructor(
-    account: Account,
-    roles: RoleShortResponse[],
-    permissionKeys: Constants.Permission.PermissionKeys[],
-  ) {
+  constructor(account: Account, roles: RoleShortResponse[]) {
     this.id = account.id;
     this.name = account.name;
     this.email = account.email;
@@ -41,6 +35,20 @@ export class AccountResponse {
 
     this.isLocked = account.isLocked;
     this.roles = roles;
+  }
+}
+
+export class AccountFullResponse extends AccountShortResponse {
+  @ApiProperty({ enum: Constants.Permission.PermissionKeys, isArray: true })
+  permissionKeys: Constants.Permission.PermissionKeys[];
+
+  constructor(
+    account: Account,
+    roles: RoleShortResponse[],
+    permissionKeys: Constants.Permission.PermissionKeys[],
+  ) {
+    super(account, roles);
+
     this.permissionKeys = permissionKeys;
   }
 }

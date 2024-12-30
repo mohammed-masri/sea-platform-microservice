@@ -25,7 +25,7 @@ import {
 } from './auth.dto';
 import { AuthService } from 'src/models/auth/auth.service';
 import { LoginResponse } from 'src/models/auth/auth.dto';
-import { AccountResponse } from 'src/models/account/account.dto';
+import { AccountFullResponse } from 'src/models/account/account.dto';
 import { JWTAuthGuard } from 'src/guards/jwt-auth.guard';
 import { AccountService } from 'src/models/account/account.service';
 import { OTPService } from 'src/models/otp/otp.service';
@@ -69,7 +69,7 @@ export class AuthController {
   @ApiOperation({ summary: 'fetch logged account details' })
   @ApiOkResponse({
     description: 'the logged account details has been fetched',
-    type: AccountResponse,
+    type: AccountFullResponse,
   })
   @ApiUnauthorizedResponse({ description: 'Invalid token' })
   async fetchLoggedAccountDetails(
@@ -79,7 +79,7 @@ export class AuthController {
     const account = await this.accountService.checkIsFound({
       where: { id: accountId },
     });
-    return this.accountService.makeAccountResponse(account);
+    return this.accountService.makeAccountFullResponse(account);
   }
 
   @Put('me')
@@ -87,7 +87,7 @@ export class AuthController {
   @ApiOperation({ summary: 'update my account details' })
   @ApiOkResponse({
     description: 'my account details has been updated',
-    type: AccountResponse,
+    type: AccountFullResponse,
   })
   @ApiUnauthorizedResponse({ description: 'Invalid token' })
   async updateLoggedAccountDetails(
@@ -100,7 +100,7 @@ export class AuthController {
       include: [Role],
     });
     account = await this.accountService.updateMe(account, body);
-    return this.accountService.makeAccountResponse(account);
+    return this.accountService.makeAccountFullResponse(account);
   }
 
   @Put('change-password')
