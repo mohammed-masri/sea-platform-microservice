@@ -4,8 +4,9 @@ import { ServerConfigService } from 'src/models/server-config/server-config.serv
 import { Account } from 'src/models/account/account.model';
 import { CONSTANTS } from 'sea-backend-helpers';
 import { Role } from 'src/models/role/role.model';
-import { RolePermission } from 'src/models/permission/role-permission.model';
 import { AccountRoles } from 'src/models/account-role/account-role.model';
+import { AccountPermission } from 'src/models/account-permission/account-permission.model';
+import { RolePermission } from 'src/models/role-permission/role-permission.model';
 
 export const databaseProviders = [
   {
@@ -29,7 +30,14 @@ export const databaseProviders = [
         dialect: 'mysql',
         ...ConnectionConfig,
       });
-      sequelize.addModels([Account, OTP, Role, RolePermission, AccountRoles]);
+      sequelize.addModels([
+        Account,
+        OTP,
+        Role,
+        RolePermission,
+        AccountRoles,
+        AccountPermission,
+      ]);
       await sequelize.sync();
       return sequelize;
     },

@@ -14,6 +14,8 @@ import { PermissionModule } from './modules/permission.module';
 import { StaticControllerModule } from './controllers/static/static.module';
 import { RoleModule } from './modules/role.module';
 import { RoleControllerModule } from './controllers/role/role-controller.module';
+import { RolePermissionModule } from './modules/role-permission.module';
+import { AccountPermissionModule } from './modules/account-permission.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { RoleControllerModule } from './controllers/role/role-controller.module'
     StaticControllerModule,
     RoleModule,
     RoleControllerModule,
+    RolePermissionModule,
+    AccountPermissionModule,
   ],
   controllers: [],
   providers: [],

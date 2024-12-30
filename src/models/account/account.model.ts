@@ -16,6 +16,7 @@ import { OTP } from '../otp/otp.model';
 import { Constants } from 'src/config';
 import { Role } from '../role/role.model';
 import { AccountRoles } from '../account-role/account-role.model';
+import { AccountPermission } from '../account-permission/account-permission.model';
 
 @Table({
   tableName: 'accounts',
@@ -90,6 +91,9 @@ export class Account extends Model {
 
   @BelongsToMany(() => Role, () => AccountRoles)
   roles: Role[];
+
+  @HasMany(() => AccountPermission)
+  accountPermissions: AccountPermission[];
 
   @BeforeCreate
   @BeforeUpdate

@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { IPermission } from 'src/config/constants/permission';
 import {
@@ -9,93 +9,9 @@ import {
 } from './permission.dto';
 import { Constants } from 'src/config';
 import { Utils } from 'sea-backend-helpers';
-import { RolePermission } from './role-permission.model';
-import { Attributes } from 'sequelize';
-import { Role } from '../role/role.model';
-import { Op } from 'sequelize';
-
 @Injectable()
 export class PermissionService {
-  constructor(
-    @Inject(Constants.Database.DatabaseRepositories.RolePermissionRepository)
-    private rolePermissionRepository: typeof RolePermission,
-  ) {}
-
-  async findAllForRole(roleId: string) {
-    return await this.rolePermissionRepository.findAll({ where: { roleId } });
-  }
-
-  async findAllForRoles(roleIds: string[]) {
-    return await this.rolePermissionRepository.findAll({
-      where: { roleId: { [Op.in]: roleIds } },
-    });
-  }
-
-  async createRolePermission(data: Attributes<RolePermission>) {
-    await this.checkIsLeafKey(data.permissionKey);
-
-    const rolePermission = new RolePermission({
-      ...data,
-    });
-    return await rolePermission.save();
-  }
-
-  async deleteRolePermission(rolePermission: RolePermission) {
-    return await rolePermission.destroy({ force: true });
-  }
-
-  async createMultiRolePermissionForRole(keys: string[], role: Role) {
-    await this.checkAreLeafKeys(keys);
-
-    const rolePermissions = await Promise.all(
-      keys.map(async (key) => {
-        return this.createRolePermission({
-          roleId: role.id,
-          permissionKey: key,
-        });
-      }),
-    );
-
-    return rolePermissions;
-  }
-
-  async updateRolePermissionForRole(
-    keys: Constants.Permission.PermissionKeys[],
-    role: Role,
-  ) {
-    await this.checkAreLeafKeys(keys);
-
-    // Fetch current role permissions from the database
-    const rolePermissions = await this.findAllForRole(role.id);
-    const currentKeys = rolePermissions.map((p) => p.permissionKey);
-
-    // Determine keys to add and remove
-    const keysToAdd = keys.filter((key) => !currentKeys.includes(key));
-    const keysToRemove = currentKeys.filter((key) => !keys.includes(key));
-
-    // Add new role permissions
-    if (keysToAdd.length > 0) {
-      await Promise.all(
-        keysToAdd.map((key) =>
-          this.createRolePermission({
-            roleId: role.id,
-            permissionKey: key,
-          }),
-        ),
-      );
-    }
-
-    // Remove unnecessary role permissions
-    if (keysToRemove.length > 0) {
-      const permissionsToRemove = rolePermissions.filter((p) =>
-        keysToRemove.includes(p.permissionKey),
-      );
-
-      await Promise.all(
-        permissionsToRemove.map((p) => this.deleteRolePermission(p)),
-      );
-    }
-  }
+  constructor() {}
 
   async findPermissionByKey(key: string) {
     let permission: IPermission | undefined = undefined;

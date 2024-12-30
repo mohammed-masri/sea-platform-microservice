@@ -32,7 +32,7 @@ import {
   UpdateRoleDto,
 } from './role.dto';
 import { RoleFullResponse, RoleShortResponse } from 'src/models/role/role.dto';
-import { RolePermission } from 'src/models/permission/role-permission.model';
+import { RolePermission } from 'src/models/role-permission/role-permission.model';
 
 @Controller('roles')
 @ApiTags('Internal', 'Role')

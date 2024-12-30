@@ -10,7 +10,6 @@ import {
   MaxLength,
   IsEnum,
   IsArray,
-  ArrayNotEmpty,
 } from 'class-validator';
 import { AccountResponse } from 'src/models/account/account.dto';
 

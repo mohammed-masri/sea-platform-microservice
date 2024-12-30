@@ -5,6 +5,8 @@ import { RoleController } from './role.controller';
 import { RoleService } from 'src/models/role/role.service';
 import { roleProviders } from 'src/models/role/role.provider';
 import { PermissionModuleDependencies } from 'src/modules/permission.module';
+import { RolePermissionModuleDependencies } from 'src/modules/role-permission.module';
+import { AccountPermissionModuleDependencies } from 'src/modules/account-permission.module';
 
 @Module({
   controllers: [RoleController],
@@ -12,6 +14,8 @@ import { PermissionModuleDependencies } from 'src/modules/permission.module';
     RoleService,
     ...roleProviders,
     ...PermissionModuleDependencies.providers,
+    ...RolePermissionModuleDependencies.providers,
+    ...AccountPermissionModuleDependencies.providers,
     JwtService,
     ServerConfigService,
   ],

@@ -7,6 +7,8 @@ import { RoleFullResponse, RoleShortResponse } from './role.dto';
 import { RoleShortArrayDataResponse } from 'src/controllers/role/role.dto';
 import { Op } from 'sequelize';
 import { Account } from '../account/account.model';
+import { RolePermissionService } from '../role-permission/role-permission.service';
+import { AccountPermissionService } from '../account-permission/account-permission.service';
 
 @Injectable()
 export class RoleService {
@@ -14,6 +16,8 @@ export class RoleService {
     @Inject(Constants.Database.DatabaseRepositories.RoleRepository)
     private roleRepository: typeof Role,
     private readonly permissionService: PermissionService,
+    private readonly rolePermissionService: RolePermissionService,
+    private readonly accountPermissionService: AccountPermissionService,
   ) {}
 
   async create(data: Attributes<Role>, permissionKeys: string[]) {
@@ -23,10 +27,7 @@ export class RoleService {
 
     await role.save();
 
-    await this.permissionService.createMultiRolePermissionForRole(
-      permissionKeys,
-      role,
-    );
+    await this.rolePermissionService.createMultiForRole(permissionKeys, role);
 
     return role;
   }
@@ -38,10 +39,7 @@ export class RoleService {
   ) {
     role = await role.update({ ...data });
 
-    await this.permissionService.updateRolePermissionForRole(
-      permissionKeys,
-      role,
-    );
+    await this.rolePermissionService.updateForRole(permissionKeys, role);
 
     return role;
   }
@@ -87,10 +85,33 @@ export class RoleService {
   }
 
   async assignRoleToAccount(account: Account, role: Role) {
+    const rolePermissions = await this.rolePermissionService.findAllForRole(
+      role.id,
+    );
+
+    await Promise.all(
+      rolePermissions.map(async (rp) => {
+        return await this.accountPermissionService.create({
+          accountId: account.id,
+          roleId: role.id,
+          permissionKey: rp.permissionKey,
+        });
+      }),
+    );
+
     return await account.$add('roles', role);
   }
 
   async unassignRoleFromAccount(account: Account, role: Role) {
+    const accountPermissions =
+      await this.accountPermissionService.findAllForRole(role.id);
+
+    await Promise.all(
+      accountPermissions.map(async (ap) => {
+        return await this.accountPermissionService.delete(ap);
+      }),
+    );
+
     // Remove the role from the account
     return await account.$remove('roles', role);
   }
@@ -125,7 +146,7 @@ export class RoleService {
   async makeRoleFullResponse(role: Role): Promise<RoleFullResponse> {
     const rolePermissions = role.rolePermissions
       ? role.rolePermissions
-      : await this.permissionService.findAllForRole(role.id);
+      : await this.rolePermissionService.findAllForRole(role.id);
 
     const permissionKeys = rolePermissions.map((p) => p.permissionKey);
 
@@ -152,12 +173,10 @@ export class RoleService {
 
     const rolePermissions = role.rolePermissions
       ? role.rolePermissions
-      : await this.permissionService.findAllForRole(role.id);
+      : await this.rolePermissionService.findAllForRole(role.id);
 
     await Promise.all(
-      rolePermissions.map((p) =>
-        this.permissionService.deleteRolePermission(p),
-      ),
+      rolePermissions.map((p) => this.rolePermissionService.delete(p)),
     );
 
     return await role.destroy({ force: true });

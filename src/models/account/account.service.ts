@@ -13,7 +13,7 @@ import { Op } from 'sequelize';
 import { Utils } from 'sea-backend-helpers';
 import { RoleService } from '../role/role.service';
 import { Role } from '../role/role.model';
-import { PermissionService } from '../permission/permission.service';
+import { RolePermissionService } from '../role-permission/role-permission.service';
 
 @Injectable()
 export class AccountService {
@@ -21,7 +21,7 @@ export class AccountService {
     @Inject(Constants.Database.DatabaseRepositories.AccountRepository)
     private accountRepository: typeof Account,
     private readonly roleService: RoleService,
-    private readonly permissionService: PermissionService,
+    private readonly rolePermissionService: RolePermissionService,
   ) {}
 
   async findAll(
@@ -201,7 +201,7 @@ export class AccountService {
 
     const roleIds = roles.map((r) => r.id);
     const rolePermissions =
-      await this.permissionService.findAllForRoles(roleIds);
+      await this.rolePermissionService.findAllForRoles(roleIds);
     const permissionKeys = rolePermissions.map((p) => p.permissionKey);
 
     return new AccountResponse(account, rolesResponse, permissionKeys);
