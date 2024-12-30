@@ -33,6 +33,7 @@ import { OTPService } from 'src/models/otp/otp.service';
 import { Op } from 'sequelize';
 import { Common } from 'sea-backend-helpers';
 import { Response } from 'express';
+import { Role } from 'src/models/role/role.model';
 
 @Controller('auth')
 @ApiTags('Internal', 'Auth')
@@ -50,9 +51,8 @@ export class AuthController {
     type: LoginResponse,
   })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
-  async login(@Body() body: LoginDto, @Res() response: Response) {
-    const loginData = await this.authService.login(body);
-    return response.send(loginData);
+  async login(@Body() body: LoginDto) {
+    return await this.authService.login(body);
   }
 
   @Post('/microsoft/login')
@@ -99,8 +99,9 @@ export class AuthController {
     const accountId = req.context.id;
     let account = await this.accountService.checkIsFound({
       where: { id: accountId },
+      include: [Role],
     });
-    account = await this.accountService.update(account, body);
+    account = await this.accountService.updateMe(account, body);
     return this.accountService.makeAccountResponse(account);
   }
 

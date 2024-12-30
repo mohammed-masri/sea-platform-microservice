@@ -12,6 +12,7 @@ import { Utils } from 'sea-backend-helpers';
 import { RolePermission } from './role-permission.model';
 import { Attributes } from 'sequelize';
 import { Role } from '../role/role.model';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class PermissionService {
@@ -21,7 +22,13 @@ export class PermissionService {
   ) {}
 
   async findAllForRole(roleId: string) {
-    return this.rolePermissionRepository.findAll({ where: { roleId } });
+    return await this.rolePermissionRepository.findAll({ where: { roleId } });
+  }
+
+  async findAllForRoles(roleIds: string[]) {
+    return await this.rolePermissionRepository.findAll({
+      where: { roleId: { [Op.in]: roleIds } },
+    });
   }
 
   async createRolePermission(data: Attributes<RolePermission>) {
@@ -30,7 +37,7 @@ export class PermissionService {
     const rolePermission = new RolePermission({
       ...data,
     });
-    return rolePermission.save();
+    return await rolePermission.save();
   }
 
   async deleteRolePermission(rolePermission: RolePermission) {
@@ -52,7 +59,10 @@ export class PermissionService {
     return rolePermissions;
   }
 
-  async updateRolePermissionForRole(keys: string[], role: Role) {
+  async updateRolePermissionForRole(
+    keys: Constants.Permission.PermissionKeys[],
+    role: Role,
+  ) {
     await this.checkAreLeafKeys(keys);
 
     // Fetch current role permissions from the database

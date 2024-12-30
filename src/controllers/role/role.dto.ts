@@ -42,7 +42,7 @@ export class CreateRoleDto {
   @IsArrayValuesIn(permissionKeys, {
     message: `Each permission must be one of the valid keys: ${permissionKeys.join(', ')}`,
   })
-  permissions: string[];
+  permissionKeys: string[];
 
   @ApiProperty({
     enum: Constants.Account.AccountTypes,
@@ -92,5 +92,5 @@ export class UpdateRoleDto {
   @IsArrayValuesIn(permissionKeys, {
     message: `Each permission must be one of the valid keys: ${permissionKeys.join(', ')}`,
   })
-  permissions: string[];
+  permissionKeys: Constants.Permission.PermissionKeys[];
 }

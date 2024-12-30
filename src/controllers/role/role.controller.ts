@@ -51,8 +51,8 @@ export class RoleController {
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   async create(@Body() body: CreateRoleDto) {
-    const { permissions, ...data } = body;
-    const role = await this.roleService.create(data, permissions);
+    const { permissionKeys, ...data } = body;
+    const role = await this.roleService.create(data, permissionKeys);
     return await this.roleService.makeRoleShortResponse(role);
   }
 
@@ -121,11 +121,11 @@ export class RoleController {
     @Param('id') id: string,
     @Body() body: UpdateRoleDto,
   ) {
-    const { permissions, ...data } = body;
+    const { permissionKeys, ...data } = body;
     let role = await this.roleService.checkIsFound({
       where: { id },
     });
-    role = await this.roleService.update(role, data, permissions);
+    role = await this.roleService.update(role, data, permissionKeys);
 
     const roleResponse = await this.roleService.makeRoleFullResponse(role);
     return roleResponse;

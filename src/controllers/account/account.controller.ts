@@ -33,6 +33,7 @@ import { FindAllDto } from 'src/common/global.dto';
 import { JWTAuthGuard } from 'src/guards/jwt-auth.guard';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
 import { Constants } from 'src/config';
+import { Role } from 'src/models/role/role.model';
 
 @Controller('accounts')
 @ApiTags('Internal', 'Account')
@@ -50,8 +51,9 @@ export class AccountController {
     type: AccountResponse,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
-  async create(@Body() data: CreateAccountDto) {
-    const account = await this.accountService.create(data);
+  async create(@Body() body: CreateAccountDto) {
+    const { roleIds, ...data } = body;
+    const account = await this.accountService.create(data, roleIds);
     const AccountResponse =
       await this.accountService.makeAccountResponse(account);
     return AccountResponse;
@@ -78,7 +80,9 @@ export class AccountController {
   })
   async findAll(@Query() query: FindAllDto) {
     const { totalCount, accounts } = await this.accountService.findAll(
-      {},
+      {
+        include: [Role],
+      },
       query.page,
       query.limit,
     );
@@ -129,8 +133,16 @@ export class AccountController {
     @Param('id') id: string,
     @Body() body: UpdateAccountDto,
   ) {
-    let account = await this.accountService.checkIsFound({ where: { id } });
-    account = await this.accountService.update(account, body);
+    const { roleIds, ...data } = body;
+    let account = await this.accountService.checkIsFound({
+      where: { id },
+      include: [Role],
+    });
+    await this.accountService.update(account, data, roleIds);
+    account = await this.accountService.checkIsFound({
+      where: { id },
+      include: [Role],
+    });
     const AccountResponse =
       await this.accountService.makeAccountResponse(account);
     return AccountResponse;

@@ -6,9 +6,12 @@ import {
   DataType,
   Default,
   HasMany,
+  BelongsToMany,
 } from 'sequelize-typescript';
 import { Constants } from 'src/config';
 import { RolePermission } from '../permission/role-permission.model';
+import { Account } from '../account/account.model';
+import { AccountRoles } from '../account-role/account-role.model';
 
 @Table({
   tableName: 'roles', // Set table name if different from model name
@@ -40,4 +43,7 @@ export class Role extends Model {
 
   @HasMany(() => RolePermission)
   rolePermissions: RolePermission[];
+
+  @BelongsToMany(() => Account, () => AccountRoles)
+  accounts: Account[];
 }

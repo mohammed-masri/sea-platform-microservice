@@ -28,5 +28,5 @@ export class RolePermission extends Model {
     type: DataType.ENUM(...Object.values(Constants.Permission.PermissionKeys)),
     allowNull: false,
   })
-  permissionKey: string;
+  permissionKey: Constants.Permission.PermissionKeys;
 }

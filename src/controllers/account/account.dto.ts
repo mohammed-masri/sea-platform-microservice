@@ -9,6 +9,8 @@ import {
   MinLength,
   MaxLength,
   IsEnum,
+  IsArray,
+  ArrayNotEmpty,
 } from 'class-validator';
 import { AccountResponse } from 'src/models/account/account.dto';
 
@@ -68,6 +70,16 @@ export class CreateAccountDto {
   @IsDateString()
   @Transform(({ value }) => (value === '' ? null : value))
   birthDate?: Date;
+
+  @ApiProperty({
+    type: String,
+    isArray: true,
+    description: 'The role ids',
+    required: true,
+  })
+  @IsArray()
+  // @ArrayNotEmpty()
+  roleIds: string[];
 }
 
 export class AccountArrayDataResponse extends ArrayDataResponse<AccountResponse> {
@@ -132,4 +144,14 @@ export class UpdateAccountDto {
   @IsDateString()
   @Transform(({ value }) => (value === '' ? null : value))
   birthDate?: Date;
+
+  @ApiProperty({
+    type: String,
+    isArray: true,
+    description: 'The role ids',
+    required: true,
+  })
+  @IsArray()
+  // @ArrayNotEmpty()
+  roleIds: string[];
 }

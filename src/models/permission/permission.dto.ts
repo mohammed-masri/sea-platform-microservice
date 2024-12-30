@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Constants } from 'src/config';
 import { IPermission } from 'src/config/constants/permission';
+import { RolePermission } from './role-permission.model';
 
 export class PermissionResponse {
   @ApiProperty()

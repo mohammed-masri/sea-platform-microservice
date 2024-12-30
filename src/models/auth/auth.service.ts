@@ -9,7 +9,6 @@ import { LoginResponse } from './auth.dto';
 import { AccountResponse } from '../account/account.dto';
 import { Op } from 'sequelize';
 import { MicrosoftAuthService } from '../microsoft-auth/microsoft-auth.service';
-import { Account } from '../account/account.model';
 import { ServerConfigService } from '../server-config/server-config.service';
 
 @Injectable()
@@ -21,10 +20,14 @@ export class AuthService {
     private readonly serverConfigService: ServerConfigService,
   ) {}
 
-  private async signToken(account: Account) {
+  private async signToken(account: AccountResponse) {
     const JWT_SECRET = this.serverConfigService.get<string>('JWT_SECRET') || '';
     const token = this.jwtService.sign(
-      { id: account.id, type: account.type },
+      {
+        id: account.id,
+        type: account.type,
+        permissionKeys: account.permissionKeys,
+      },
       {
         secret: JWT_SECRET,
         ...JWTConfig.JWT_OPTIONS,
@@ -61,12 +64,12 @@ export class AuthService {
     if (account.isLocked)
       throw new UnauthorizedException('The account has been locked!');
 
-    const token = await this.signToken(account);
+    const accountResponse =
+      await this.accountService.makeAccountResponse(account);
 
-    return this.makeLoginResponse(
-      token,
-      this.accountService.makeAccountResponse(account),
-    );
+    const token = await this.signToken(accountResponse);
+
+    return this.makeLoginResponse(token, accountResponse);
   }
 
   async microsoftLogin(data: MicrosoftLoginDto) {
@@ -83,22 +86,25 @@ export class AuthService {
     if (!account) {
       // The account type will be User by default when login by microsoft
 
-      account = await this.accountService.create({
-        name,
-        email,
-        type: Constants.Account.AccountTypes.User,
-      });
+      account = await this.accountService.create(
+        {
+          name,
+          email,
+          type: Constants.Account.AccountTypes.User,
+        },
+        [],
+      );
     }
 
     if (account.isLocked)
       throw new UnauthorizedException('The account has been locked!');
 
-    const token = await this.signToken(account);
+    const accountResponse =
+      await this.accountService.makeAccountResponse(account);
 
-    return this.makeLoginResponse(
-      token,
-      this.accountService.makeAccountResponse(account),
-    );
+    const token = await this.signToken(accountResponse);
+
+    return this.makeLoginResponse(token, accountResponse);
   }
 
   makeLoginResponse(accessToken: string, account: AccountResponse) {

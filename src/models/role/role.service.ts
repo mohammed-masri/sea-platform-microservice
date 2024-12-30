@@ -5,6 +5,8 @@ import { Role } from './role.model';
 import { PermissionService } from '../permission/permission.service';
 import { RoleFullResponse, RoleShortResponse } from './role.dto';
 import { RoleShortArrayDataResponse } from 'src/controllers/role/role.dto';
+import { Op } from 'sequelize';
+import { Account } from '../account/account.model';
 
 @Injectable()
 export class RoleService {
@@ -29,7 +31,11 @@ export class RoleService {
     return role;
   }
 
-  async update(role: Role, data: Attributes<Role>, permissionKeys: string[]) {
+  async update(
+    role: Role,
+    data: Attributes<Role>,
+    permissionKeys: Constants.Permission.PermissionKeys[],
+  ) {
     role = await role.update({ ...data });
 
     await this.permissionService.updateRolePermissionForRole(
@@ -59,6 +65,16 @@ export class RoleService {
     };
   }
 
+  async findByIds(ids: string[]) {
+    return await this.roleRepository.findAll({
+      where: { id: { [Op.in]: ids } },
+    });
+  }
+
+  async findAllForAccount(accountId: string) {
+    return await this.roleRepository.findAll({ where: { accountId } });
+  }
+
   async findOne(options?: FindOptions<Attributes<Role>>) {
     return await this.roleRepository.findOne(options);
   }
@@ -68,6 +84,15 @@ export class RoleService {
     if (!role) throw new NotFoundException(`Role is not found!`);
 
     return role;
+  }
+
+  async assignRoleToAccount(account: Account, role: Role) {
+    return await account.$add('roles', role);
+  }
+
+  async unassignRoleFromAccount(account: Account, role: Role) {
+    // Remove the role from the account
+    return await account.$remove('roles', role);
   }
 
   async makeRoleShortResponse(role: Role) {

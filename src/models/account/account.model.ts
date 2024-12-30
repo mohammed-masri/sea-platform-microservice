@@ -8,11 +8,14 @@ import {
   BeforeUpdate,
   HasMany,
   Default,
+  BelongsToMany,
 } from 'sequelize-typescript';
 import { Utils } from 'sea-backend-helpers';
 
 import { OTP } from '../otp/otp.model';
 import { Constants } from 'src/config';
+import { Role } from '../role/role.model';
+import { AccountRoles } from '../account-role/account-role.model';
 
 @Table({
   tableName: 'accounts',
@@ -84,6 +87,9 @@ export class Account extends Model {
     allowNull: false,
   })
   type: Constants.Account.AccountTypes;
+
+  @BelongsToMany(() => Role, () => AccountRoles)
+  roles: Role[];
 
   @BeforeCreate
   @BeforeUpdate
