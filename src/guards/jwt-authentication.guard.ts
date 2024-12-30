@@ -46,6 +46,7 @@ export class JWTAuthGuard implements CanActivate {
         id: payload.id,
         type: payload.type,
         account: undefined,
+        permissionKeys: payload.permissionKeys,
       };
 
       return true;

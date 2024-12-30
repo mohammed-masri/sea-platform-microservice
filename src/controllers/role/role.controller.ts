@@ -24,7 +24,7 @@ import {
 import { FindAllDto } from 'src/common/global.dto';
 import { Constants } from 'src/config';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
-import { JWTAuthGuard } from 'src/guards/jwt-auth.guard';
+import { JWTAuthGuard } from 'src/guards/jwt-authentication.guard';
 import { RoleService } from 'src/models/role/role.service';
 import {
   CreateRoleDto,

@@ -30,7 +30,7 @@ import {
 } from './account.dto';
 import { AccountFullResponse } from 'src/models/account/account.dto';
 import { FindAllDto } from 'src/common/global.dto';
-import { JWTAuthGuard } from 'src/guards/jwt-auth.guard';
+import { JWTAuthGuard } from 'src/guards/jwt-authentication.guard';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
 import { Constants } from 'src/config';
 import { Role } from 'src/models/role/role.model';
