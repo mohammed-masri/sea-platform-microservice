@@ -1,16 +1,15 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Constants } from 'src/config';
 import { OTP } from './otp.model';
-import { AccountService } from '../account/account.service';
-import { Attributes, FindOptions, Op } from 'sequelize';
+import { Attributes, FindOptions } from 'sequelize';
 import { Utils } from 'sea-backend-helpers';
+import { Account } from '../account/account.model';
 
 @Injectable()
 export class OTPService {
   constructor(
     @Inject(Constants.Database.DatabaseRepositories.OTPRepository)
     private otpRepository: typeof OTP,
-    private readonly accountService: AccountService,
   ) {}
 
   async findByIdentifier(identifier: string) {
@@ -21,11 +20,7 @@ export class OTPService {
     return await this.otpRepository.findOne(options);
   }
 
-  async createOrUpdate(identifier: string) {
-    const account = await this.accountService.findOne({
-      where: { [Op.or]: { email: identifier, phoneNumber: identifier } },
-    });
-
+  async createOrUpdate(identifier: string, account: Account | undefined) {
     const otpCode = Utils.String.generateRandomString();
 
     const expiresAt = new Date(

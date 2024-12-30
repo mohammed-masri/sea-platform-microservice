@@ -12,7 +12,6 @@ import { Op } from 'sequelize';
 import { Utils } from 'sea-backend-helpers';
 import { RoleService } from '../role/role.service';
 import { Role } from '../role/role.model';
-import { RolePermissionService } from '../role-permission/role-permission.service';
 import { AccountFullResponse, AccountShortResponse } from './account.dto';
 
 @Injectable()
@@ -21,8 +20,17 @@ export class AccountService {
     @Inject(Constants.Database.DatabaseRepositories.AccountRepository)
     private accountRepository: typeof Account,
     private readonly roleService: RoleService,
-    private readonly rolePermissionService: RolePermissionService,
   ) {}
+
+  async getAccountRoles(account: Account) {
+    return account.roles ? account.roles : await account.$get('roles');
+  }
+
+  async getAccountPermissions(account: Account) {
+    return account.accountPermissions
+      ? account.accountPermissions
+      : await account.$get('accountPermissions');
+  }
 
   async findAll(
     options?: FindOptions<Attributes<Account>>,
@@ -102,9 +110,7 @@ export class AccountService {
   }
 
   async updateMe(account: Account, data: Attributes<Account>) {
-    const roles = account.roles
-      ? account.roles
-      : await this.roleService.findAllForAccount(account.id);
+    const roles = await this.getAccountRoles(account);
 
     // pass same current role Ids
     const roleIds = roles.map((r) => r.id);
@@ -124,9 +130,7 @@ export class AccountService {
 
     // Fetch current and new roles
     const [currentRoles, newRoles] = await Promise.all([
-      account.roles
-        ? account.roles
-        : await this.roleService.findAllForAccount(account.id),
+      await this.getAccountRoles(account),
       await this.roleService.findByIds(newRoleIds),
     ]);
 
@@ -162,6 +166,7 @@ export class AccountService {
   }
 
   async delete(account: Account) {
+    // TODO // to be reviewed after finish
     await account.destroy();
   }
 
@@ -187,15 +192,7 @@ export class AccountService {
   }
 
   async makeAccountShortResponse(account: Account) {
-    let roles: Role[] = [];
-    if (account.roles && account.roles.length) roles = account.roles;
-    else {
-      const acc = await this.findOne({
-        where: { id: account.id },
-        include: [Role],
-      });
-      if (acc) roles = acc.roles;
-    }
+    const roles = await this.getAccountRoles(account);
 
     const rolesResponse = await this.roleService.makeRolesShortResponse(roles);
 
@@ -205,10 +202,8 @@ export class AccountService {
   async makeAccountFullResponse(account: Account) {
     const accountResponse = await this.makeAccountShortResponse(account);
 
-    const roleIds = accountResponse.roles.map((r) => r.id);
-    const rolePermissions =
-      await this.rolePermissionService.findAllForRoles(roleIds);
-    const permissionKeys = rolePermissions.map((p) => p.permissionKey);
+    const accountPermissions = await this.getAccountPermissions(account);
+    const permissionKeys = accountPermissions.map((p) => p.permissionKey);
 
     return new AccountFullResponse(
       account,

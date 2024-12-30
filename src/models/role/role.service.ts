@@ -1,4 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Constants } from 'src/config';
 import { Attributes, FindOptions } from 'sequelize';
 import { Role } from './role.model';
@@ -19,6 +24,22 @@ export class RoleService {
     private readonly rolePermissionService: RolePermissionService,
     private readonly accountPermissionService: AccountPermissionService,
   ) {}
+
+  async getRolePermissions(role: Role) {
+    return role.rolePermissions
+      ? role.rolePermissions
+      : await role.$get('rolePermissions');
+  }
+
+  async getAccountPermissions(role: Role) {
+    return role.accountPermissions
+      ? role.accountPermissions
+      : await role.$get('accountPermissions');
+  }
+
+  async getAccounts(role: Role) {
+    return role.accounts ? role.accounts : await role.$get('accounts');
+  }
 
   async create(data: Attributes<Role>, permissionKeys: string[]) {
     const role = new Role({
@@ -69,10 +90,6 @@ export class RoleService {
     });
   }
 
-  async findAllForAccount(accountId: string) {
-    return await this.roleRepository.findAll({ where: { accountId } });
-  }
-
   async findOne(options?: FindOptions<Attributes<Role>>) {
     return await this.roleRepository.findOne(options);
   }
@@ -85,9 +102,7 @@ export class RoleService {
   }
 
   async assignRoleToAccount(account: Account, role: Role) {
-    const rolePermissions = await this.rolePermissionService.findAllForRole(
-      role.id,
-    );
+    const rolePermissions = await this.getRolePermissions(role);
 
     await Promise.all(
       rolePermissions.map(async (rp) => {
@@ -103,8 +118,7 @@ export class RoleService {
   }
 
   async unassignRoleFromAccount(account: Account, role: Role) {
-    const accountPermissions =
-      await this.accountPermissionService.findAllForRole(role.id);
+    const accountPermissions = await this.getAccountPermissions(role);
 
     await Promise.all(
       accountPermissions.map(async (ap) => {
@@ -144,9 +158,7 @@ export class RoleService {
   }
 
   async makeRoleFullResponse(role: Role): Promise<RoleFullResponse> {
-    const rolePermissions = role.rolePermissions
-      ? role.rolePermissions
-      : await this.rolePermissionService.findAllForRole(role.id);
+    const rolePermissions = await this.getRolePermissions(role);
 
     const permissionKeys = rolePermissions.map((p) => p.permissionKey);
 
@@ -168,17 +180,22 @@ export class RoleService {
   }
 
   async delete(role: Role) {
-    // TODO
-    // check if there are any account has it
+    // Fetch accounts associated with the role
+    const accounts = await this.getAccounts(role);
 
-    const rolePermissions = role.rolePermissions
-      ? role.rolePermissions
-      : await this.rolePermissionService.findAllForRole(role.id);
+    if (accounts && accounts.length) {
+      throw new BadRequestException(
+        `There are (${accounts.length}) accounts associated with this role, it can't be deleted`,
+      );
+    }
 
-    await Promise.all(
-      rolePermissions.map((p) => this.rolePermissionService.delete(p)),
+    // Forcefully delete associated RolePermissions and AccountPermissions
+    const rolePermissions = await this.getRolePermissions(role);
+    await rolePermissions.map((permission) =>
+      this.rolePermissionService.delete(permission),
     );
 
+    // Delete the role itself
     return await role.destroy({ force: true });
   }
 }

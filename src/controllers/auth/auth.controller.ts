@@ -142,7 +142,11 @@ export class AuthController {
       identifier = phoneNumber;
     }
 
-    await this.OTPService.createOrUpdate(identifier);
+    const account = await this.accountService.findOne({
+      where: { [Op.or]: { email: identifier, phoneNumber: identifier } },
+    });
+
+    await this.OTPService.createOrUpdate(identifier, account);
 
     return true;
   }

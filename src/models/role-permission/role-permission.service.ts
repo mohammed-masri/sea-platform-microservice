@@ -15,9 +15,12 @@ export class RolePermissionService {
   ) {}
 
   async findAllForRole(roleId: string) {
-    return await this.rolePermissionRepository.findAll({ where: { roleId } });
+    return await this.rolePermissionRepository.findAll({
+      where: {
+        roleId,
+      },
+    });
   }
-
   async findAllForRoles(roleIds: string[]) {
     return await this.rolePermissionRepository.findAll({
       where: { roleId: { [Op.in]: roleIds } },
