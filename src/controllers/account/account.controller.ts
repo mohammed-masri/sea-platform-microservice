@@ -34,6 +34,7 @@ import { JWTAuthGuard } from 'src/guards/jwt-authentication.guard';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
 import { Constants } from 'src/config';
 import { Role } from 'src/models/role/role.model';
+import { JWTAuthorizationGuard } from 'src/guards/jwt-authorization.guard';
 
 @Controller('accounts')
 @ApiTags('Internal', 'Account')
@@ -45,6 +46,11 @@ export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   @Post()
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageAccountsCreate,
+    ]),
+  )
   @ApiOperation({ summary: 'Create a new account' })
   @ApiCreatedResponse({
     description: 'The account has been successfully created.',
@@ -60,6 +66,11 @@ export class AccountController {
   }
 
   @Get()
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageAccountsRead,
+    ]),
+  )
   @ApiOperation({ summary: 'fetch accounts' })
   @ApiQuery({
     name: 'page',
@@ -99,6 +110,11 @@ export class AccountController {
   }
 
   @Get('/:id')
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageAccountsRead,
+    ]),
+  )
   @ApiOperation({ summary: 'get account details' })
   @ApiParam({
     name: 'id',
@@ -118,6 +134,11 @@ export class AccountController {
   }
 
   @Put('/:id')
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageAccountsUpdateDetails,
+    ]),
+  )
   @ApiOperation({ summary: 'update account details' })
   @ApiParam({
     name: 'id',
@@ -149,6 +170,11 @@ export class AccountController {
   }
 
   @Put('/:id/change-password')
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageAccountsChangePassword,
+    ]),
+  )
   @ApiOperation({ summary: 'change account password' })
   @ApiParam({
     name: 'id',
@@ -169,6 +195,11 @@ export class AccountController {
   }
 
   @Put('/:id/toggle-lock')
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageAccountsUpdateDetails,
+    ]),
+  )
   @ApiOperation({ summary: 'toggle lock account account' })
   @ApiParam({
     name: 'id',
@@ -187,6 +218,11 @@ export class AccountController {
   }
 
   @Delete('/:id')
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageAccountsDelete,
+    ]),
+  )
   @ApiOperation({ summary: 'delete account (soft delete)' })
   @ApiParam({
     name: 'id',

@@ -42,11 +42,11 @@ export class Role extends Model {
   })
   type: Constants.Account.AccountTypes;
 
-  @HasMany(() => RolePermission)
-  rolePermissions: RolePermission[];
-
   @BelongsToMany(() => Account, () => AccountRoles)
   accounts: Account[];
+
+  @HasMany(() => RolePermission)
+  rolePermissions: RolePermission[];
 
   @HasMany(() => AccountPermission)
   accountPermissions: AccountPermission[];

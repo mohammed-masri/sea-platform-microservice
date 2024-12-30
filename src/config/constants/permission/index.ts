@@ -5,6 +5,7 @@ export enum PermissionKeys {
   ManageAccountsCreate = 'manage-accounts-create',
   ManageAccountsChangePassword = 'manage-accounts-change-password',
   ManageAccountsUpdateDetails = 'manage-accounts-update-details',
+  ManageAccountsDelete = 'manage-accounts-delete',
   ManageRoles = 'manage-roles',
   ManageRolesRead = 'manage-roles-read',
   ManageRolesCreate = 'manage-roles-create',

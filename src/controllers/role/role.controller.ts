@@ -33,6 +33,8 @@ import {
 } from './role.dto';
 import { RoleFullResponse, RoleShortResponse } from 'src/models/role/role.dto';
 import { RolePermission } from 'src/models/role-permission/role-permission.model';
+import { JWTAuthorizationGuard } from 'src/guards/jwt-authorization.guard';
+import { Account } from 'src/models/account/account.model';
 
 @Controller('roles')
 @ApiTags('Internal', 'Role')
@@ -44,6 +46,11 @@ export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @Post()
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageRolesCreate,
+    ]),
+  )
   @ApiOperation({ summary: 'Create a new role' })
   @ApiCreatedResponse({
     description: 'The role has been successfully created.',
@@ -57,6 +64,11 @@ export class RoleController {
   }
 
   @Get()
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageRolesRead,
+    ]),
+  )
   @ApiOperation({ summary: 'fetch roles' })
   @ApiQuery({
     name: 'page',
@@ -85,6 +97,11 @@ export class RoleController {
   }
 
   @Get('/:id')
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageRolesRead,
+    ]),
+  )
   @ApiOperation({ summary: 'get role details' })
   @ApiParam({
     name: 'id',
@@ -106,6 +123,11 @@ export class RoleController {
   }
 
   @Put('/:id')
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageRolesUpdateDetails,
+    ]),
+  )
   @ApiOperation({ summary: 'update role details' })
   @ApiParam({
     name: 'id',
@@ -132,6 +154,11 @@ export class RoleController {
   }
 
   @Delete('/:id')
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageRolesDelete,
+    ]),
+  )
   @ApiOperation({ summary: 'delete role (force delete)' })
   @ApiParam({
     name: 'id',
@@ -146,7 +173,7 @@ export class RoleController {
   async delete(@Param('id') id: string) {
     const role = await this.roleService.checkIsFound({
       where: { id },
-      include: [RolePermission],
+      include: [RolePermission, Account],
     });
     await this.roleService.delete(role);
     const roleResponse = await this.roleService.makeRoleFullResponse(role);
