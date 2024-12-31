@@ -17,17 +17,16 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { FindAllDto } from 'src/common/global.dto';
 import { Constants } from 'src/config';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
 import { JWTAuthGuard } from 'src/guards/jwt-authentication.guard';
 import { RoleService } from 'src/models/role/role.service';
 import {
   CreateRoleDto,
+  FindAllRolesDto,
   RoleShortArrayDataResponse,
   UpdateRoleDto,
 } from './role.dto';
@@ -70,27 +69,17 @@ export class RoleController {
     ]),
   )
   @ApiOperation({ summary: 'fetch roles' })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Page number for pagination',
-  })
-  @ApiQuery({
-    name: 'limit',
-    required: false,
-    type: Number,
-    description: 'Number of items per page',
-  })
   @ApiResponse({
     status: 200,
     description: 'Retrieve a paginated list of roles',
     type: RoleShortArrayDataResponse,
   })
-  async findAll(@Query() query: FindAllDto) {
+  async findAll(@Query() query: FindAllRolesDto) {
     const response = await this.roleService.makeRoleShortArrayDataResponse(
       query.page,
       query.limit,
+      query.q,
+      query.accountType,
     );
 
     return response;

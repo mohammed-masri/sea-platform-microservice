@@ -10,12 +10,25 @@ import {
   MaxLength,
   IsEnum,
   IsArray,
+  IsIn,
 } from 'class-validator';
 
 import { Utils } from 'sea-backend-helpers';
-import { ArrayDataResponse } from 'src/common/global.dto';
+import { ArrayDataResponse, FindAllDto } from 'src/common/global.dto';
 import { Constants } from 'src/config';
 import { AccountShortResponse } from 'src/models/account/account.dto';
+
+export class FindAllAccountsDto extends FindAllDto {
+  @ApiProperty({
+    required: false,
+    type: String,
+    description: 'the roles account type (nothing means all)',
+    enum: Constants.Account.AccountTypes,
+  })
+  @IsIn([...Object.values(Constants.Account.AccountTypes), ''])
+  @IsOptional()
+  type: Constants.Account.AccountTypes | '';
+}
 
 export class CreateAccountDto {
   @ApiProperty({

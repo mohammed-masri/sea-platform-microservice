@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Constants } from 'src/config';
-import { Attributes, FindOptions } from 'sequelize';
+import { Attributes, FindOptions, WhereOptions } from 'sequelize';
 import { Role } from './role.model';
 import { PermissionService } from '../permission/permission.service';
 import { RoleFullResponse, RoleShortResponse } from './role.dto';
@@ -14,6 +14,7 @@ import { Op } from 'sequelize';
 import { Account } from '../account/account.model';
 import { RolePermissionService } from '../role-permission/role-permission.service';
 import { AccountPermissionService } from '../account-permission/account-permission.service';
+import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
 export class RoleService {
@@ -156,8 +157,23 @@ export class RoleService {
     return rolesResponse;
   }
 
-  async makeRoleShortArrayDataResponse(page: number, limit: number) {
-    const { totalCount, roles } = await this.findAll({}, page, limit);
+  async makeRoleShortArrayDataResponse(
+    page: number,
+    limit: number,
+    q: string,
+    accountType: Constants.Account.AccountTypes | '',
+  ) {
+    const where: WhereOptions<Role> = {};
+    if (accountType) where['type'] = accountType;
+    if (q) {
+      where[Op.or] = ['id', 'name'].map((c) =>
+        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col(`Role.${c}`)), {
+          [Op.like]: `%${q}%`,
+        }),
+      );
+    }
+
+    const { totalCount, roles } = await this.findAll({ where }, page, limit);
 
     const rolesResponse = await this.makeRolesShortResponse(roles);
 

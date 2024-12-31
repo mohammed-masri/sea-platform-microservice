@@ -7,13 +7,26 @@ import {
   IsArray,
   ArrayNotEmpty,
   IsEnum,
+  IsIn,
 } from 'class-validator';
-import { ArrayDataResponse } from 'src/common/global.dto';
+import { ArrayDataResponse, FindAllDto } from 'src/common/global.dto';
 import { IsArrayValuesIn } from 'src/decorators/is-array-values-in.decorator';
 import { Constants } from 'src/config';
 import { RoleShortResponse } from 'src/models/role/role.dto';
 
 const permissionKeys = [...Object.values(Constants.Permission.PermissionKeys)];
+
+export class FindAllRolesDto extends FindAllDto {
+  @ApiProperty({
+    required: false,
+    type: String,
+    description: 'the roles account type (nothing means all)',
+    enum: Constants.Account.AccountTypes,
+  })
+  @IsIn([...Object.values(Constants.Account.AccountTypes), ''])
+  @IsOptional()
+  accountType: Constants.Account.AccountTypes | '';
+}
 
 export class CreateRoleDto {
   @ApiProperty({

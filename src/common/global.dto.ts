@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsInt, IsOptional, Min } from 'class-validator';
 
 export class ArrayDataResponse<T> {
@@ -46,4 +46,15 @@ export class FindAllDto {
   @Min(1)
   @IsOptional()
   limit?: number = 10;
+
+  @ApiProperty({
+    type: String,
+    description: 'the search query',
+    required: false,
+  })
+  @IsOptional()
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.toLowerCase() : value,
+  )
+  q?: string = '';
 }

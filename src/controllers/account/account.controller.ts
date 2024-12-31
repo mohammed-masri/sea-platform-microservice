@@ -27,14 +27,18 @@ import {
   CreateAccountDto,
   UpdateAccountDto,
   AccountArrayDataResponse,
+  FindAllAccountsDto,
 } from './account.dto';
 import { AccountFullResponse } from 'src/models/account/account.dto';
-import { FindAllDto } from 'src/common/global.dto';
 import { JWTAuthGuard } from 'src/guards/jwt-authentication.guard';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
 import { Constants } from 'src/config';
 import { Role } from 'src/models/role/role.model';
 import { JWTAuthorizationGuard } from 'src/guards/jwt-authorization.guard';
+import { WhereOptions } from 'sequelize';
+import { Account } from 'src/models/account/account.model';
+import { Op } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 
 @Controller('accounts')
 @ApiTags('Internal', 'Account')
@@ -89,9 +93,22 @@ export class AccountController {
     description: 'Retrieve a paginated list of accounts',
     type: AccountArrayDataResponse,
   })
-  async findAll(@Query() query: FindAllDto) {
+  async findAll(@Query() query: FindAllAccountsDto) {
+    const { q, type } = query;
+
+    const where: WhereOptions<Account> = {};
+    if (type) where['type'] = type;
+    if (q) {
+      where[Op.or] = ['id', 'name', 'email', 'phoneNumber'].map((c) =>
+        Sequelize.where(Sequelize.fn('LOWER', Sequelize.col(`Account.${c}`)), {
+          [Op.like]: `%${q}%`,
+        }),
+      );
+    }
+
     const { totalCount, accounts } = await this.accountService.findAll(
       {
+        where,
         include: [Role],
       },
       query.page,
