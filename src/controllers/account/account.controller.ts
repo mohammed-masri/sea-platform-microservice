@@ -97,7 +97,7 @@ export class AccountController {
     const { q, type } = query;
 
     const where: WhereOptions<Account> = {};
-    if (type) where['type'] = type;
+    if (type !== 'all') where['type'] = type;
     if (q) {
       where[Op.or] = ['id', 'name', 'email', 'phoneNumber'].map((c) =>
         Sequelize.where(Sequelize.fn('LOWER', Sequelize.col(`Account.${c}`)), {

@@ -23,9 +23,9 @@ export class FindAllRolesDto extends FindAllDto {
     description: 'the roles account type (nothing means all)',
     enum: Constants.Account.AccountTypes,
   })
-  @IsIn([...Object.values(Constants.Account.AccountTypes), ''])
+  @IsIn([...Object.values(Constants.Account.AccountTypes), 'all'])
   @IsOptional()
-  accountType: Constants.Account.AccountTypes | '';
+  accountType: Constants.Account.AccountTypes | 'all';
 }
 
 export class CreateRoleDto {

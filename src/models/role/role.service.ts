@@ -161,10 +161,10 @@ export class RoleService {
     page: number,
     limit: number,
     q: string,
-    accountType: Constants.Account.AccountTypes | '',
+    accountType: Constants.Account.AccountTypes | 'all',
   ) {
     const where: WhereOptions<Role> = {};
-    if (accountType) where['type'] = accountType;
+    if (accountType !== 'all') where['type'] = accountType;
     if (q) {
       where[Op.or] = ['id', 'name'].map((c) =>
         Sequelize.where(Sequelize.fn('LOWER', Sequelize.col(`Role.${c}`)), {
