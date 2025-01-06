@@ -48,6 +48,13 @@ export class CreateRoleDto {
   description: string | undefined;
 
   @ApiProperty({
+    description: 'The hex code color',
+    example: '#000000',
+  })
+  @IsString()
+  color: string;
+
+  @ApiProperty({
     description: 'the list of the permissions',
   })
   @IsArray()
@@ -96,6 +103,13 @@ export class UpdateRoleDto {
   })
   @IsOptional()
   description: string | undefined;
+
+  @ApiProperty({
+    description: 'The hex code color',
+    example: '#000000',
+  })
+  @IsString()
+  color: string;
 
   @ApiProperty({
     description: 'the list of the permissions',

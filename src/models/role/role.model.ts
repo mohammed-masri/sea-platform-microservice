@@ -37,6 +37,12 @@ export class Role extends Model {
   description: string | undefined;
 
   @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  color: string;
+
+  @Column({
     type: DataType.ENUM(...Object.values(Constants.Account.AccountTypes)),
     allowNull: false,
   })

@@ -10,6 +10,8 @@ export class RoleShortResponse {
   name: string;
   @ApiProperty()
   description: string;
+  @ApiProperty()
+  color: string;
   @ApiProperty({
     enum: Constants.Account.AccountTypes,
   })
@@ -19,6 +21,7 @@ export class RoleShortResponse {
     this.id = role.id;
     this.name = role.name;
     this.description = role.description;
+    this.color = role.color;
     this.type = role.type;
   }
 }
