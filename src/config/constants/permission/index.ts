@@ -19,6 +19,11 @@ export enum PermissionKeys {
   ContractsAppManageContractsCreate = 'contracts-app-manage-contracts-create',
   ContractsAppManageContractsUpdateDetails = 'contracts-app-manage-contracts-update-details',
   ContractsAppManageContractsDelete = 'contracts-app-manage-contracts-delete',
+  ContractsAppManageContractTemplates = 'contracts-app-manage-contract-templates',
+  ContractsAppManageContractTemplatesRead = 'contracts-app-manage-contract-templates-read',
+  ContractsAppManageContractTemplatesCreate = 'contracts-app-manage-contract-templates-create',
+  ContractsAppManageContractTemplatesUpdateDetails = 'contracts-app-manage-contract-templates-update-details',
+  ContractsAppManageContractTemplatesDelete = 'contracts-app-manage-contract-templates-delete',
 }
 
 export interface IPermission {
@@ -51,6 +56,28 @@ export const USER_PERMISSIONS: IPermission[] = [
           {
             key: PermissionKeys.ContractsAppManageContractsDelete,
             name: 'Delete Contract',
+          },
+        ],
+      },
+      {
+        key: PermissionKeys.ContractsAppManageContractTemplates,
+        name: 'Manage Contract Templates',
+        children: [
+          {
+            key: PermissionKeys.ContractsAppManageContractTemplatesRead,
+            name: 'Read Contract Templates',
+          },
+          {
+            key: PermissionKeys.ContractsAppManageContractTemplatesCreate,
+            name: 'Create Contract Template',
+          },
+          {
+            key: PermissionKeys.ContractsAppManageContractTemplatesUpdateDetails,
+            name: 'Update Contract Template',
+          },
+          {
+            key: PermissionKeys.ContractsAppManageContractTemplatesDelete,
+            name: 'Delete Contract Template',
           },
         ],
       },
