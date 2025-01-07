@@ -165,6 +165,11 @@ export class AccountService {
     return await account.save();
   }
 
+  async restore(account: Account) {
+    await account.restore();
+    return account;
+  }
+
   async delete(account: Account) {
     // TODO // to be reviewed after finish
     await account.destroy();

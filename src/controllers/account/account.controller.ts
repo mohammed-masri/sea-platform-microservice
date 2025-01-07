@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -94,7 +95,7 @@ export class AccountController {
     type: AccountArrayDataResponse,
   })
   async findAll(@Query() query: FindAllAccountsDto) {
-    const { q, type, roleId } = query;
+    const { q, type, roleId, isDeleted } = query;
 
     const where: WhereOptions<Account> = {};
     const roleWhere: WhereOptions<Role> = {};
@@ -107,6 +108,10 @@ export class AccountController {
       );
     }
 
+    if (isDeleted) {
+      where['deletedAt'] = { [Op.ne]: null };
+    }
+
     if (roleId !== 'all') {
       roleWhere['id'] = roleId;
     }
@@ -115,6 +120,7 @@ export class AccountController {
       {
         where,
         include: [{ model: Role, where: roleWhere }],
+        paranoid: !isDeleted,
       },
       query.page,
       query.limit,
@@ -222,7 +228,7 @@ export class AccountController {
       Constants.Permission.PermissionKeys.ManageAccountsUpdateDetails,
     ]),
   )
-  @ApiOperation({ summary: 'toggle lock account account' })
+  @ApiOperation({ summary: 'toggle lock account' })
   @ApiParam({
     name: 'id',
     type: Number,
@@ -239,10 +245,36 @@ export class AccountController {
     return await this.accountService.makeAccountFullResponse(account);
   }
 
-  @Delete('/:id')
+  @Put('/:id/restore')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageAccountsDelete,
+      Constants.Permission.PermissionKeys.ManageAccountsRestore,
+    ]),
+  )
+  @ApiOperation({ summary: 'restore account' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'ID',
+  })
+  @ApiOkResponse({
+    description: 'the account has been restored successfully',
+    type: AccountFullResponse,
+  })
+  @ApiNotFoundResponse({ description: 'Account not found' })
+  async restore(@Param('id') id: string) {
+    let account = await this.accountService.checkIsFound({
+      where: { id, deletedAt: { [Op.ne]: null } },
+      paranoid: false,
+    });
+    account = await this.accountService.restore(account);
+    return await this.accountService.makeAccountFullResponse(account);
+  }
+
+  @Delete('/:id/soft-delete')
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageAccountsSoftDelete,
     ]),
   )
   @ApiOperation({ summary: 'delete account (soft delete)' })
@@ -256,11 +288,32 @@ export class AccountController {
     type: AccountFullResponse,
   })
   @ApiNotFoundResponse({ description: 'Account not found' })
-  async delete(@Param('id') id: string) {
+  async softDelete(@Param('id') id: string) {
     const account = await this.accountService.checkIsFound({ where: { id } });
     await this.accountService.delete(account);
     const AccountResponse =
       await this.accountService.makeAccountFullResponse(account);
     return AccountResponse;
+  }
+
+  @Delete('/:id/force-delete')
+  @UseGuards(
+    new JWTAuthorizationGuard([
+      Constants.Permission.PermissionKeys.ManageAccountsForceDelete,
+    ]),
+  )
+  @ApiOperation({ summary: 'delete account (force delete)' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'ID of the account to delete',
+  })
+  @ApiNoContentResponse({
+    description: 'Account successfully force deleted',
+    type: AccountFullResponse,
+  })
+  @ApiNotFoundResponse({ description: 'Account not found' })
+  async forceDelete(@Param('id') id: string) {
+    throw new BadRequestException('Force delete is not implemented yet!');
   }
 }

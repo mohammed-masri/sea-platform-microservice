@@ -6,6 +6,9 @@ export enum PermissionKeys {
   ManageAccountsChangePassword = 'manage-accounts-change-password',
   ManageAccountsUpdateDetails = 'manage-accounts-update-details',
   ManageAccountsDelete = 'manage-accounts-delete',
+  ManageAccountsSoftDelete = 'manage-accounts-soft-delete',
+  ManageAccountsForceDelete = 'manage-accounts-force-delete',
+  ManageAccountsRestore = 'manage-accounts-restore',
   ManageRoles = 'manage-roles',
   ManageRolesRead = 'manage-roles-read',
   ManageRolesCreate = 'manage-roles-create',
@@ -109,6 +112,20 @@ export const ADMIN_PERMISSIONS: IPermission[] = [
       {
         key: PermissionKeys.ManageAccountsDelete,
         name: 'Delete Account',
+        children: [
+          {
+            key: PermissionKeys.ManageAccountsSoftDelete,
+            name: 'Soft Delete Account',
+          },
+          {
+            key: PermissionKeys.ManageAccountsForceDelete,
+            name: 'Force Delete Account',
+          },
+        ],
+      },
+      {
+        key: PermissionKeys.ManageAccountsRestore,
+        name: 'Restore Account',
       },
     ],
   },

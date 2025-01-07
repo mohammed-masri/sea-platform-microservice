@@ -11,6 +11,7 @@ import {
   IsEnum,
   IsArray,
   IsIn,
+  IsBoolean,
 } from 'class-validator';
 
 import { Utils } from 'sea-backend-helpers';
@@ -35,6 +36,15 @@ export class FindAllAccountsDto extends FindAllDto {
   })
   @IsString()
   roleId: string | 'all';
+
+  @ApiProperty({
+    required: true,
+    type: Boolean,
+    description: 'Whether the account is deleted',
+  })
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true') // Convert the query parameter to a boolean
+  isDeleted: boolean;
 }
 
 export class CreateAccountDto {
