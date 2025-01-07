@@ -20,14 +20,21 @@ import { AccountShortResponse } from 'src/models/account/account.dto';
 
 export class FindAllAccountsDto extends FindAllDto {
   @ApiProperty({
-    required: false,
+    required: true,
     type: String,
-    description: 'the roles account type (nothing means all)',
+    description: 'the roles account type',
     enum: Constants.Account.AccountTypes,
   })
   @IsIn([...Object.values(Constants.Account.AccountTypes), 'all'])
-  @IsOptional()
   type: Constants.Account.AccountTypes | 'all';
+
+  @ApiProperty({
+    required: true,
+    type: String,
+    description: "the role id or 'all'",
+  })
+  @IsString()
+  roleId: string | 'all';
 }
 
 export class CreateAccountDto {

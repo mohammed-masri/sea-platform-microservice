@@ -94,9 +94,10 @@ export class AccountController {
     type: AccountArrayDataResponse,
   })
   async findAll(@Query() query: FindAllAccountsDto) {
-    const { q, type } = query;
+    const { q, type, roleId } = query;
 
     const where: WhereOptions<Account> = {};
+    const roleWhere: WhereOptions<Role> = {};
     if (type !== 'all') where['type'] = type;
     if (q) {
       where[Op.or] = ['id', 'name', 'email', 'phoneNumber'].map((c) =>
@@ -106,10 +107,14 @@ export class AccountController {
       );
     }
 
+    if (roleId !== 'all') {
+      roleWhere['id'] = roleId;
+    }
+
     const { totalCount, accounts } = await this.accountService.findAll(
       {
         where,
-        include: [Role],
+        include: [{ model: Role, where: roleWhere }],
       },
       query.page,
       query.limit,
