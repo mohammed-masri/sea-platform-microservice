@@ -7,6 +7,7 @@ import { Role } from 'src/models/role/role.model';
 import { AccountRoles } from 'src/models/account-role/account-role.model';
 import { AccountPermission } from 'src/models/account-permission/account-permission.model';
 import { RolePermission } from 'src/models/role-permission/role-permission.model';
+import { Application } from 'src/models/application/application.model';
 
 export const databaseProviders = [
   {
@@ -37,6 +38,7 @@ export const databaseProviders = [
         RolePermission,
         AccountRoles,
         AccountPermission,
+        Application,
       ]);
       await sequelize.sync();
       return sequelize;

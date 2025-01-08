@@ -16,6 +16,8 @@ import { RoleModule } from './modules/role.module';
 import { RoleControllerModule } from './controllers/role/role-controller.module';
 import { RolePermissionModule } from './modules/role-permission.module';
 import { AccountPermissionModule } from './modules/account-permission.module';
+import { ApplicationModule } from './modules/application.module';
+import { ApplicationControllerModule } from './controllers/application/application.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { AccountPermissionModule } from './modules/account-permission.module';
     RoleControllerModule,
     RolePermissionModule,
     AccountPermissionModule,
+    ApplicationModule,
+    ApplicationControllerModule,
   ],
   controllers: [],
   providers: [],

@@ -6,4 +6,5 @@ export enum DatabaseRepositories {
   PermissionRepository = 'PermissionRepository',
   RolePermissionRepository = 'RolePermissionRepository',
   AccountPermissionRepository = 'AccountPermissionRepository',
+  ApplicationRepository = 'ApplicationRepository',
 }

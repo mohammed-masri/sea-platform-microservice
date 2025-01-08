@@ -14,6 +14,11 @@ export enum PermissionKeys {
   ManageRolesCreate = 'manage-roles-create',
   ManageRolesUpdateDetails = 'manage-roles-update-details',
   ManageRolesDelete = 'manage-roles-delete',
+  ManageApplication = 'manage-applications',
+  ManageApplicationRead = 'manage-applications-read',
+  ManageApplicationCreate = 'manage-applications-create',
+  ManageApplicationUpdateDetails = 'manage-applications-update-details',
+  ManageApplicationDelete = 'manage-applications-delete',
 
   // User
   ContractsApp = 'contracts-app',
@@ -148,6 +153,28 @@ export const ADMIN_PERMISSIONS: IPermission[] = [
       {
         key: PermissionKeys.ManageRolesDelete,
         name: 'Delete Role',
+      },
+    ],
+  },
+  {
+    key: PermissionKeys.ManageApplication,
+    name: 'Manage Applications',
+    children: [
+      {
+        key: PermissionKeys.ManageApplicationRead,
+        name: 'Read Applications',
+      },
+      {
+        key: PermissionKeys.ManageApplicationCreate,
+        name: 'Create Applications',
+      },
+      {
+        key: PermissionKeys.ManageApplicationUpdateDetails,
+        name: 'Update Application Details',
+      },
+      {
+        key: PermissionKeys.ManageApplicationDelete,
+        name: 'Delete Application',
       },
     ],
   },

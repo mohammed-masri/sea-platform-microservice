@@ -102,7 +102,7 @@ export class RoleController {
     type: RoleFullResponse,
   })
   @ApiNotFoundResponse({ description: 'Role not found' })
-  async fetchAccountDetails(@Param('id') id: string) {
+  async fetchRoleDetails(@Param('id') id: string) {
     const role = await this.roleService.checkIsFound({
       where: { id },
       include: [RolePermission],
