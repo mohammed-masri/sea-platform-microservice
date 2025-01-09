@@ -33,6 +33,7 @@ import { Constants } from 'src/config';
 import { JWTAuthGuard } from 'src/guards/jwt-authentication.guard';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
 import { ApplicationResponse } from 'src/models/application/application.dto';
+import { File } from 'src/models/file/file.model';
 
 @Controller('applications')
 @ApiTags('Internal', 'Application')
@@ -56,7 +57,8 @@ export class ApplicationController {
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   async create(@Body() body: CreateApplicationDto) {
-    const application = await this.applicationService.create(body);
+    const { iconFileId, ...data } = body;
+    const application = await this.applicationService.create(data, iconFileId);
     return await this.applicationService.makeApplicationResponse(application);
   }
 
@@ -103,6 +105,7 @@ export class ApplicationController {
   async fetchApplicationDetails(@Param('id') id: string) {
     const application = await this.applicationService.checkIsFound({
       where: { id },
+      include: [File],
     });
     const applicationResponse =
       await this.applicationService.makeApplicationResponse(application);
@@ -130,10 +133,16 @@ export class ApplicationController {
     @Param('id') id: string,
     @Body() body: UpdateApplicationDto,
   ) {
+    const { iconFileId, ...data } = body;
+
     let application = await this.applicationService.checkIsFound({
       where: { id },
     });
-    application = await this.applicationService.update(application, body);
+    application = await this.applicationService.update(
+      application,
+      data,
+      iconFileId,
+    );
 
     const applicationResponse =
       await this.applicationService.makeApplicationResponse(application);
@@ -194,6 +203,7 @@ export class ApplicationController {
   async delete(@Param('id') id: string) {
     const application = await this.applicationService.checkIsFound({
       where: { id },
+      include: [File],
     });
     await this.applicationService.delete(application);
     const applicationResponse =

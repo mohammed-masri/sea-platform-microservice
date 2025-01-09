@@ -31,10 +31,10 @@ export class CreateApplicationDto {
 
   @ApiProperty({
     required: true,
-    description: 'The icon URL of the application',
+    description: 'The icon file id of the application',
   })
   @IsString()
-  iconURL: string;
+  iconFileId: string;
 
   @ApiProperty({
     required: true,
@@ -65,10 +65,10 @@ export class UpdateApplicationDto {
 
   @ApiProperty({
     required: true,
-    description: 'The icon URL of the application',
+    description: 'The icon file id of the application',
   })
   @IsString()
-  iconURL: string;
+  iconFileId: string;
 
   @ApiProperty({
     required: true,

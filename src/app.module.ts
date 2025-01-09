@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { DatabaseModule } from './database/database.module';
 import { AccountModule } from './modules/account.module';
 import { AccountControllerModule } from './controllers/account/account-controller.module';
@@ -18,12 +19,18 @@ import { RolePermissionModule } from './modules/role-permission.module';
 import { AccountPermissionModule } from './modules/account-permission.module';
 import { ApplicationModule } from './modules/application.module';
 import { ApplicationControllerModule } from './controllers/application/application.module';
+import { FileManagerControllerModule } from './controllers/file-manager/file-manager.module';
+import { join } from 'path';
+import { FileModule } from './modules/file.module';
 
 @Module({
   imports: [
     DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
     }),
     ServerConfigModule,
     AccountModule,
@@ -42,6 +49,8 @@ import { ApplicationControllerModule } from './controllers/application/applicati
     AccountPermissionModule,
     ApplicationModule,
     ApplicationControllerModule,
+    FileModule,
+    FileManagerControllerModule,
   ],
   controllers: [],
   providers: [],
