@@ -52,8 +52,8 @@ export class Application extends Model {
     type: DataType.UUID,
     allowNull: true,
   })
-  iconFileId: string;
+  iconFileId: string | undefined;
 
   @BelongsTo(() => File, { as: 'iconFile' })
-  iconFile: File;
+  iconFile: File | undefined;
 }

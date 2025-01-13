@@ -10,8 +10,8 @@ export class ApplicationResponse {
   name: string;
   @ApiProperty({ required: false })
   description: string | undefined;
-  @ApiProperty({ type: FileResponse })
-  iconFile: FileResponse;
+  @ApiProperty({ type: FileResponse, nullable: true })
+  iconFile: FileResponse | undefined;
   @ApiProperty({
     enum: Constants.Application.ApplicationStatuses,
   })
@@ -19,7 +19,7 @@ export class ApplicationResponse {
   @ApiProperty()
   URL: string;
 
-  constructor(application: Application, iconFile: FileResponse) {
+  constructor(application: Application, iconFile: FileResponse | undefined) {
     this.id = application.id;
     this.name = application.name;
     this.description = application.description;
