@@ -30,7 +30,8 @@ import { FileModule } from './modules/file.module';
       isGlobal: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/public',
     }),
     ServerConfigModule,
     AccountModule,

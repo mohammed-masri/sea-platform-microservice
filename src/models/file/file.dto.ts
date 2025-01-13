@@ -18,6 +18,6 @@ export class FileResponse {
     this.name = file.name;
     this.size = file.size;
     this.mimetype = file.mimetype;
-    this.URL = 'HOST/' + file.path; // TODO
+    this.URL = 'http://localhost:4001/' + file.path.replace(/\\/g, '/'); // TODO
   }
 }

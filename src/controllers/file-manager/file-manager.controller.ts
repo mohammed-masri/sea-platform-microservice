@@ -41,7 +41,7 @@ export class FileManagerController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './uploads', // Directory to store files
+        destination: './public/uploads', // Directory to store files
         filename: (req, file, cb) => {
           const uniqueName = `${uuidv4()}${path.extname(file.originalname)}`;
           cb(null, uniqueName);
@@ -58,8 +58,6 @@ export class FileManagerController {
   async uploadFile(
     @UploadedFile() file: Express.Multer.File, // Use this type
   ) {
-    console.log('file\n', file);
-
     const f = await this.fileService.create({
       name: file.originalname,
       size: file.size,
