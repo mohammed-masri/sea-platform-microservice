@@ -76,6 +76,13 @@ export class UpdateApplicationDto {
   })
   @IsString()
   URL: string;
+
+  @ApiProperty({
+    required: true,
+    enum: Constants.Application.ApplicationStatuses,
+  })
+  @IsIn([...Object.values(Constants.Application.ApplicationStatuses)])
+  status: Constants.Application.ApplicationStatuses;
 }
 
 export class UpdateApplicationStatusDto {
