@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { AccountService } from '../account/account.service';
 import { LoginDto, MicrosoftLoginDto } from 'src/controllers/auth/auth.dto';
-import { Utils } from 'sea-backend-helpers';
+import { Utils } from 'sea-platform-helpers';
 import { Constants, JWTConfig } from 'src/config';
 import { LoginResponse } from './auth.dto';
 import { AccountFullResponse } from '../account/account.dto';

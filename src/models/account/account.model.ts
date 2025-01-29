@@ -10,7 +10,7 @@ import {
   Default,
   BelongsToMany,
 } from 'sequelize-typescript';
-import { Utils } from 'sea-backend-helpers';
+import { Utils } from 'sea-platform-helpers';
 
 import { OTP } from '../otp/otp.model';
 import { Constants } from 'src/config';

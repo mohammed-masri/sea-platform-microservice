@@ -2,7 +2,7 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Constants } from 'src/config';
 import { OTP } from './otp.model';
 import { Attributes, FindOptions } from 'sequelize';
-import { Utils } from 'sea-backend-helpers';
+import { Utils } from 'sea-platform-helpers';
 import { Account } from '../account/account.model';
 
 @Injectable()

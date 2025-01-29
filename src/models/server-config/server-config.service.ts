@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { CONSTANTS } from 'sea-backend-helpers';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Injectable()
 export class ServerConfigService {

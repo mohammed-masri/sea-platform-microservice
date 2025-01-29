@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { Common } from 'sea-backend-helpers';
+import { Common } from 'sea-platform-helpers';
 import { Constants } from 'src/config';
 
 @Injectable()

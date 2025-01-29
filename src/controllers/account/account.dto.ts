@@ -14,7 +14,7 @@ import {
   IsBoolean,
 } from 'class-validator';
 
-import { Utils } from 'sea-backend-helpers';
+import { Utils } from 'sea-platform-helpers';
 import { ArrayDataResponse, FindAllDto } from 'src/common/global.dto';
 import { Constants } from 'src/config';
 import { AccountShortResponse } from 'src/models/account/account.dto';

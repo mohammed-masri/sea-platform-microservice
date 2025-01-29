@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { Common } from 'sea-backend-helpers';
+import { Common } from 'sea-platform-helpers';
 
 import { ServerConfigService } from 'src/models/server-config/server-config.service';
 

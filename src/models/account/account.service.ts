@@ -9,7 +9,7 @@ import { Account } from './account.model';
 import { Constants } from 'src/config';
 import { Attributes, FindOptions } from 'sequelize';
 import { Op } from 'sequelize';
-import { Utils } from 'sea-backend-helpers';
+import { Utils } from 'sea-platform-helpers';
 import { RoleService } from '../role/role.service';
 import { Role } from '../role/role.model';
 import { AccountFullResponse, AccountShortResponse } from './account.dto';

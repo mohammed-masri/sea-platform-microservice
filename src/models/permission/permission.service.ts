@@ -8,7 +8,7 @@ import {
   PermissionResponseForRole,
 } from './permission.dto';
 import { Constants } from 'src/config';
-import { Utils } from 'sea-backend-helpers';
+import { Utils } from 'sea-platform-helpers';
 @Injectable()
 export class PermissionService {
   constructor() {}

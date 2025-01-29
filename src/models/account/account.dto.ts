@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Account } from './account.model';
 import { Constants } from 'src/config';
-import { Utils } from 'sea-backend-helpers';
+import { Utils } from 'sea-platform-helpers';
 import { RoleShortResponse } from '../role/role.dto';
 
 export class AccountShortResponse {

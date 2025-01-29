@@ -2,7 +2,7 @@ import { Sequelize, SequelizeOptions } from 'sequelize-typescript';
 import { OTP } from 'src/models/otp/otp.model';
 import { ServerConfigService } from 'src/models/server-config/server-config.service';
 import { Account } from 'src/models/account/account.model';
-import { CONSTANTS } from 'sea-backend-helpers';
+import { CONSTANTS } from 'sea-platform-helpers';
 import { Role } from 'src/models/role/role.model';
 import { AccountRoles } from 'src/models/account-role/account-role.model';
 import { AccountPermission } from 'src/models/account-permission/account-permission.model';
