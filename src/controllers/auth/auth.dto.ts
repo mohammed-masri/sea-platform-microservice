@@ -10,7 +10,8 @@ import {
   MaxLength,
   IsDateString,
 } from 'class-validator';
-import { Utils, Decorators } from 'sea-platform-helpers';
+import { Utils } from 'sea-platform-helpers';
+import { Decorators } from 'sea-backend-helpers';
 
 export class LoginDto {
   @ApiPropertyOptional({

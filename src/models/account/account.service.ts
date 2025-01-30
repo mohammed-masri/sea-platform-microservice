@@ -12,7 +12,7 @@ import { Op } from 'sequelize';
 import { RoleService } from '../role/role.service';
 import { Role } from '../role/role.model';
 import { AccountFullResponse, AccountShortResponse } from './account.dto';
-import { BcryptUtils } from 'src/utils';
+import { Utils as BackendUtils } from 'sea-backend-helpers';
 
 @Injectable()
 export class AccountService {
@@ -182,7 +182,7 @@ export class AccountService {
     oldPassword: string = null,
   ) {
     if (compareTheOldPassword) {
-      const isCorrect = await BcryptUtils.comparePassword(
+      const isCorrect = await BackendUtils.Bcrypt.comparePassword(
         oldPassword,
         account?.password,
       );

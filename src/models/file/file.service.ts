@@ -1,9 +1,10 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { Constants } from 'src/config';
+import { join } from 'path';
 import { File } from './file.model';
 import { Attributes, FindOptions } from 'sequelize';
 import { FileResponse } from './file.dto';
-import { FileUtils } from 'src/utils';
+import { Utils as BackendUtils } from 'sea-backend-helpers';
 
 @Injectable()
 export class FileService {
@@ -33,7 +34,8 @@ export class FileService {
 
   async delete(file: File) {
     // delete the static file first
-    await FileUtils.removeFile(file.path);
+    const absolutePath = join(__dirname, '..', '..', '..', file.path);
+    await BackendUtils.File.removeFile(absolutePath);
 
     return await file.destroy({ force: true });
   }

@@ -10,9 +10,9 @@ import {
   IsIn,
 } from 'class-validator';
 import { ArrayDataResponse, FindAllDto } from 'src/common/global.dto';
-import { IsArrayValuesIn } from 'src/decorators/is-array-values-in.decorator';
 import { RoleShortResponse } from 'src/models/role/role.dto';
 import { CONSTANTS } from 'sea-platform-helpers';
+import { Decorators } from 'sea-backend-helpers';
 
 const permissionKeys = [...Object.values(CONSTANTS.Permission.PermissionKeys)];
 
@@ -59,7 +59,7 @@ export class CreateRoleDto {
   })
   @IsArray()
   @ArrayNotEmpty()
-  @IsArrayValuesIn(permissionKeys, {
+  @Decorators.IsArrayValuesIn(permissionKeys, {
     message: `Each permission must be one of the valid keys: ${permissionKeys.join(', ')}`,
   })
   permissionKeys: string[];
@@ -116,7 +116,7 @@ export class UpdateRoleDto {
   })
   @IsArray()
   @ArrayNotEmpty()
-  @IsArrayValuesIn(permissionKeys, {
+  @Decorators.IsArrayValuesIn(permissionKeys, {
     message: `Each permission must be one of the valid keys: ${permissionKeys.join(', ')}`,
   })
   permissionKeys: CONSTANTS.Permission.PermissionKeys[];

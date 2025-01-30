@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CONSTANTS, DTO } from 'sea-platform-helpers';
-
 export class PermissionResponse {
   @ApiProperty()
   name: string;

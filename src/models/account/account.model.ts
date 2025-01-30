@@ -16,7 +16,7 @@ import { OTP } from '../otp/otp.model';
 import { Role } from '../role/role.model';
 import { AccountRoles } from '../account-role/account-role.model';
 import { AccountPermission } from '../account-permission/account-permission.model';
-import { BcryptUtils } from 'src/utils';
+import { Utils as BackendUtils } from 'sea-backend-helpers';
 
 @Table({
   tableName: 'accounts',
@@ -102,7 +102,9 @@ export class Account extends Model {
       account.email = Utils.String.normalizeString(account.email);
     }
     if (account.password && account.changed('password')) {
-      account.password = await BcryptUtils.hashPassword(account.password);
+      account.password = await BackendUtils.Bcrypt.hashPassword(
+        account.password,
+      );
     }
 
     if (account.phoneNumber) {

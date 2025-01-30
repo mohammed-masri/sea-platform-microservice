@@ -10,7 +10,7 @@ import { AccountFullResponse } from '../account/account.dto';
 import { Op } from 'sequelize';
 import { MicrosoftAuthService } from '../microsoft-auth/microsoft-auth.service';
 import { ServerConfigService } from '../server-config/server-config.service';
-import { BcryptUtils } from 'src/utils';
+import { Utils as BackendUtils } from 'sea-backend-helpers';
 
 @Injectable()
 export class AuthService {
@@ -55,7 +55,7 @@ export class AuthService {
 
     if (!account) throw new UnauthorizedException('Invalid credentials');
 
-    const isCorrect = await BcryptUtils.comparePassword(
+    const isCorrect = await BackendUtils.Bcrypt.comparePassword(
       password,
       account?.password,
     );
