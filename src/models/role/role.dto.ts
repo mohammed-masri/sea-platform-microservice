@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Role } from './role.model';
-import { Constants } from 'src/config';
 import { PermissionResponseForRole } from '../permission/permission.dto';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 export class RoleShortResponse {
   @ApiProperty()
@@ -13,9 +13,9 @@ export class RoleShortResponse {
   @ApiProperty()
   color: string;
   @ApiProperty({
-    enum: Constants.Account.AccountTypes,
+    enum: CONSTANTS.Account.AccountTypes,
   })
-  type: Constants.Account.AccountTypes;
+  type: CONSTANTS.Account.AccountTypes;
 
   constructor(role: Role) {
     this.id = role.id;

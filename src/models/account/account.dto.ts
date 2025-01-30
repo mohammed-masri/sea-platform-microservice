@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Account } from './account.model';
-import { Constants } from 'src/config';
 import { Utils } from 'sea-platform-helpers';
 import { RoleShortResponse } from '../role/role.dto';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 export class AccountShortResponse {
   @ApiProperty({ type: String })
@@ -14,7 +14,7 @@ export class AccountShortResponse {
   @ApiProperty()
   phoneNumber: string;
   @ApiProperty()
-  type: Constants.Account.AccountTypes;
+  type: CONSTANTS.Account.AccountTypes;
   @ApiProperty()
   birthDate: string;
   @ApiProperty({ type: Boolean })
@@ -32,20 +32,19 @@ export class AccountShortResponse {
     if (account.birthDate) {
       this.birthDate = Utils.Moment.formatData(account.birthDate, 'YYYY-MM-DD');
     }
-
     this.isLocked = account.isLocked;
     this.roles = roles;
   }
 }
 
 export class AccountFullResponse extends AccountShortResponse {
-  @ApiProperty({ enum: Constants.Permission.PermissionKeys, isArray: true })
-  permissionKeys: Constants.Permission.PermissionKeys[];
+  @ApiProperty({ enum: CONSTANTS.Permission.PermissionKeys, isArray: true })
+  permissionKeys: CONSTANTS.Permission.PermissionKeys[];
 
   constructor(
     account: Account,
     roles: RoleShortResponse[],
-    permissionKeys: Constants.Permission.PermissionKeys[],
+    permissionKeys: CONSTANTS.Permission.PermissionKeys[],
   ) {
     super(account, roles);
 

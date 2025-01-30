@@ -24,7 +24,7 @@ export const databaseProviders = [
       };
 
       const serverEnv = serverConfigService.getServerEnvironment();
-      if (serverEnv !== CONSTANTS.Environments.Production) {
+      if (serverEnv !== CONSTANTS.Server.Environments.Production) {
         ConnectionConfig.sync = { alter: true };
       }
 

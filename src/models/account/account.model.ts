@@ -10,13 +10,13 @@ import {
   Default,
   BelongsToMany,
 } from 'sequelize-typescript';
-import { Utils } from 'sea-platform-helpers';
+import { Utils, CONSTANTS } from 'sea-platform-helpers';
 
 import { OTP } from '../otp/otp.model';
-import { Constants } from 'src/config';
 import { Role } from '../role/role.model';
 import { AccountRoles } from '../account-role/account-role.model';
 import { AccountPermission } from '../account-permission/account-permission.model';
+import { BcryptUtils } from 'src/utils';
 
 @Table({
   tableName: 'accounts',
@@ -84,10 +84,10 @@ export class Account extends Model {
   OTPs: OTP[];
 
   @Column({
-    type: DataType.ENUM(...Object.values(Constants.Account.AccountTypes)),
+    type: DataType.ENUM(...Object.values(CONSTANTS.Account.AccountTypes)),
     allowNull: false,
   })
-  type: Constants.Account.AccountTypes;
+  type: CONSTANTS.Account.AccountTypes;
 
   @BelongsToMany(() => Role, () => AccountRoles)
   roles: Role[];
@@ -102,7 +102,7 @@ export class Account extends Model {
       account.email = Utils.String.normalizeString(account.email);
     }
     if (account.password && account.changed('password')) {
-      account.password = await Utils.Bcrypt.hashPassword(account.password);
+      account.password = await BcryptUtils.hashPassword(account.password);
     }
 
     if (account.phoneNumber) {

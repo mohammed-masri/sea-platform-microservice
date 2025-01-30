@@ -1,22 +1,22 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 
-import { IPermission } from 'src/config/constants/permission';
+import { DTO } from 'sea-platform-helpers';
 import {
   AllPermissionResponse,
   PermissionChecked,
   PermissionResponse,
   PermissionResponseForRole,
 } from './permission.dto';
-import { Constants } from 'src/config';
-import { Utils } from 'sea-platform-helpers';
+import { Utils, CONSTANTS } from 'sea-platform-helpers';
+
 @Injectable()
 export class PermissionService {
   constructor() {}
 
   async findPermissionByKey(key: string) {
-    let permission: IPermission | undefined = undefined;
-    for (let i = 0; i < Constants.Permission.PERMISSIONS.length; i++) {
-      const p = Constants.Permission.PERMISSIONS[i];
+    let permission: DTO.Permission.IPermission | undefined = undefined;
+    for (let i = 0; i < CONSTANTS.Permission.PERMISSIONS.length; i++) {
+      const p = CONSTANTS.Permission.PERMISSIONS[i];
 
       permission = await Utils.DFS.findItem(
         p,
@@ -40,8 +40,8 @@ export class PermissionService {
   async getAllLeafKeys() {
     let keys: string[] = [];
 
-    for (let i = 0; i < Constants.Permission.PERMISSIONS.length; i++) {
-      const p = Constants.Permission.PERMISSIONS[i];
+    for (let i = 0; i < CONSTANTS.Permission.PERMISSIONS.length; i++) {
+      const p = CONSTANTS.Permission.PERMISSIONS[i];
       const leafKeys = await this.getLeafKeys(p.key as string);
       keys = Utils.Array.concatWithoutDuplicates(
         keys,
@@ -73,7 +73,7 @@ export class PermissionService {
     }
   }
 
-  private async makePermissionResponse(permission: IPermission) {
+  private async makePermissionResponse(permission: DTO.Permission.IPermission) {
     const children: PermissionResponse[] = [];
 
     for (let i = 0; i < permission.children?.length; i++) {
@@ -85,7 +85,9 @@ export class PermissionService {
     return new PermissionResponse(permission, children);
   }
 
-  private async makePermissionsResponse(permissions: IPermission[]) {
+  private async makePermissionsResponse(
+    permissions: DTO.Permission.IPermission[],
+  ) {
     const permissionsResponse: PermissionResponse[] = [];
 
     for (let i = 0; i < permissions.length; i++) {
@@ -99,15 +101,15 @@ export class PermissionService {
 
   async fetchAllPermissions() {
     const [user, admin] = await Promise.all([
-      this.makePermissionsResponse(Constants.Permission.USER_PERMISSIONS),
-      this.makePermissionsResponse(Constants.Permission.ADMIN_PERMISSIONS),
+      this.makePermissionsResponse(CONSTANTS.Permission.USER_PERMISSIONS),
+      this.makePermissionsResponse(CONSTANTS.Permission.ADMIN_PERMISSIONS),
     ]);
 
     return new AllPermissionResponse(user, admin);
   }
 
   async makePermissionResponseForRole(
-    permission: IPermission,
+    permission: DTO.Permission.IPermission,
     permissionKeys: string[],
   ): Promise<PermissionResponseForRole> {
     const children: PermissionResponseForRole[] = [];

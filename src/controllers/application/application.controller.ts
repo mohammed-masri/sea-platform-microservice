@@ -29,17 +29,17 @@ import {
   UpdateApplicationDto,
   UpdateApplicationStatusDto,
 } from './application.dto';
-import { Constants } from 'src/config';
 import { JWTAuthGuard } from 'src/guards/jwt-authentication.guard';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
 import { ApplicationResponse } from 'src/models/application/application.dto';
 import { File } from 'src/models/file/file.model';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Controller('applications')
 @ApiTags('Internal', 'Application')
 @UseGuards(
   JWTAuthGuard,
-  new CheckAccountTypeGuard(Constants.Account.AccountTypes.Admin),
+  new CheckAccountTypeGuard(CONSTANTS.Account.AccountTypes.Admin),
 )
 export class ApplicationController {
   constructor(private readonly applicationService: ApplicationService) {}
@@ -47,7 +47,7 @@ export class ApplicationController {
   @Post()
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageApplicationCreate,
+      CONSTANTS.Permission.PermissionKeys.ManageApplicationCreate,
     ]),
   )
   @ApiOperation({ summary: 'Create a new application' })
@@ -65,7 +65,7 @@ export class ApplicationController {
   @Get()
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageApplicationRead,
+      CONSTANTS.Permission.PermissionKeys.ManageApplicationRead,
     ]),
   )
   @ApiOperation({ summary: 'fetch applications' })
@@ -88,7 +88,7 @@ export class ApplicationController {
   @Get('/:id')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageApplicationRead,
+      CONSTANTS.Permission.PermissionKeys.ManageApplicationRead,
     ]),
   )
   @ApiOperation({ summary: 'get application details' })
@@ -115,7 +115,7 @@ export class ApplicationController {
   @Put('/:id')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageApplicationUpdateDetails,
+      CONSTANTS.Permission.PermissionKeys.ManageApplicationUpdateDetails,
     ]),
   )
   @ApiOperation({ summary: 'update application details' })
@@ -152,7 +152,7 @@ export class ApplicationController {
   @Put('/:id/status')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageApplicationUpdateDetails,
+      CONSTANTS.Permission.PermissionKeys.ManageApplicationUpdateDetails,
     ]),
   )
   @ApiOperation({ summary: 'update application details' })
@@ -186,7 +186,7 @@ export class ApplicationController {
   @Delete('/:id')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageApplicationDelete,
+      CONSTANTS.Permission.PermissionKeys.ManageApplicationDelete,
     ]),
   )
   @ApiOperation({ summary: 'delete application (force delete)' })

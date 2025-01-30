@@ -33,19 +33,19 @@ import {
 import { AccountFullResponse } from 'src/models/account/account.dto';
 import { JWTAuthGuard } from 'src/guards/jwt-authentication.guard';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
-import { Constants } from 'src/config';
 import { Role } from 'src/models/role/role.model';
 import { JWTAuthorizationGuard } from 'src/guards/jwt-authorization.guard';
 import { WhereOptions } from 'sequelize';
 import { Account } from 'src/models/account/account.model';
 import { Op } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Controller('accounts')
 @ApiTags('Internal', 'Account')
 @UseGuards(
   JWTAuthGuard,
-  new CheckAccountTypeGuard(Constants.Account.AccountTypes.Admin),
+  new CheckAccountTypeGuard(CONSTANTS.Account.AccountTypes.Admin),
 )
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
@@ -53,7 +53,7 @@ export class AccountController {
   @Post()
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageAccountsCreate,
+      CONSTANTS.Permission.PermissionKeys.ManageAccountsCreate,
     ]),
   )
   @ApiOperation({ summary: 'Create a new account' })
@@ -73,7 +73,7 @@ export class AccountController {
   @Get()
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageAccountsRead,
+      CONSTANTS.Permission.PermissionKeys.ManageAccountsRead,
     ]),
   )
   @ApiOperation({ summary: 'fetch accounts' })
@@ -140,7 +140,7 @@ export class AccountController {
   @Get('/:id')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageAccountsRead,
+      CONSTANTS.Permission.PermissionKeys.ManageAccountsRead,
     ]),
   )
   @ApiOperation({ summary: 'get account details' })
@@ -164,7 +164,7 @@ export class AccountController {
   @Put('/:id')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageAccountsUpdateDetails,
+      CONSTANTS.Permission.PermissionKeys.ManageAccountsUpdateDetails,
     ]),
   )
   @ApiOperation({ summary: 'update account details' })
@@ -200,7 +200,7 @@ export class AccountController {
   @Put('/:id/change-password')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageAccountsChangePassword,
+      CONSTANTS.Permission.PermissionKeys.ManageAccountsChangePassword,
     ]),
   )
   @ApiOperation({ summary: 'change account password' })
@@ -225,7 +225,7 @@ export class AccountController {
   @Put('/:id/toggle-lock')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageAccountsUpdateDetails,
+      CONSTANTS.Permission.PermissionKeys.ManageAccountsUpdateDetails,
     ]),
   )
   @ApiOperation({ summary: 'toggle lock account' })
@@ -248,7 +248,7 @@ export class AccountController {
   @Put('/:id/restore')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageAccountsRestore,
+      CONSTANTS.Permission.PermissionKeys.ManageAccountsRestore,
     ]),
   )
   @ApiOperation({ summary: 'restore account' })
@@ -274,7 +274,7 @@ export class AccountController {
   @Delete('/:id/soft-delete')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageAccountsSoftDelete,
+      CONSTANTS.Permission.PermissionKeys.ManageAccountsSoftDelete,
     ]),
   )
   @ApiOperation({ summary: 'delete account (soft delete)' })
@@ -299,7 +299,7 @@ export class AccountController {
   @Delete('/:id/force-delete')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageAccountsForceDelete,
+      CONSTANTS.Permission.PermissionKeys.ManageAccountsForceDelete,
     ]),
   )
   @ApiOperation({ summary: 'delete account (force delete)' })
@@ -313,6 +313,7 @@ export class AccountController {
     type: AccountFullResponse,
   })
   @ApiNotFoundResponse({ description: 'Account not found' })
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async forceDelete(@Param('id') id: string) {
     throw new BadRequestException('Force delete is not implemented yet!');
   }

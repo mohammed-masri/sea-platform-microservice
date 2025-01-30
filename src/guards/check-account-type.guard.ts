@@ -5,21 +5,19 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { Common } from 'sea-platform-helpers';
-
-import { Constants } from 'src/config';
+import { DTO, CONSTANTS } from 'sea-platform-helpers';
 
 @Injectable()
 export class CheckAccountTypeGuard implements CanActivate {
-  private type: Constants.Account.AccountTypes;
-  constructor(type: Constants.Account.AccountTypes) {
+  private type: CONSTANTS.Account.AccountTypes;
+  constructor(type: CONSTANTS.Account.AccountTypes) {
     this.type = type;
   }
 
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request: Common.DTO.AuthorizedRequest = context
+    const request: DTO.Request.AuthorizedRequest = context
       .switchToHttp()
       .getRequest();
 

@@ -14,9 +14,8 @@ import {
   IsBoolean,
 } from 'class-validator';
 
-import { Utils } from 'sea-platform-helpers';
+import { Utils, CONSTANTS } from 'sea-platform-helpers';
 import { ArrayDataResponse, FindAllDto } from 'src/common/global.dto';
-import { Constants } from 'src/config';
 import { AccountShortResponse } from 'src/models/account/account.dto';
 
 export class FindAllAccountsDto extends FindAllDto {
@@ -24,10 +23,10 @@ export class FindAllAccountsDto extends FindAllDto {
     required: true,
     type: String,
     description: 'the roles account type',
-    enum: Constants.Account.AccountTypes,
+    enum: CONSTANTS.Account.AccountTypes,
   })
-  @IsIn([...Object.values(Constants.Account.AccountTypes), 'all'])
-  type: Constants.Account.AccountTypes | 'all';
+  @IsIn([...Object.values(CONSTANTS.Account.AccountTypes), 'all'])
+  type: CONSTANTS.Account.AccountTypes | 'all';
 
   @ApiProperty({
     required: true,
@@ -76,10 +75,10 @@ export class CreateAccountDto {
   phoneNumber: string;
 
   @ApiProperty({
-    enum: Constants.Account.AccountTypes,
+    enum: CONSTANTS.Account.AccountTypes,
   })
-  @IsEnum(Constants.Account.AccountTypes)
-  type: Constants.Account.AccountTypes;
+  @IsEnum(CONSTANTS.Account.AccountTypes)
+  type: CONSTANTS.Account.AccountTypes;
 
   @ApiProperty({
     description: 'Password for the account account (min length: 8 characters)',

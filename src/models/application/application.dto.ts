@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Constants } from 'src/config';
 import { Application } from './application.model';
 import { FileResponse } from '../file/file.dto';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 export class ApplicationResponse {
   @ApiProperty()
@@ -13,9 +13,9 @@ export class ApplicationResponse {
   @ApiProperty({ type: FileResponse, nullable: true })
   iconFile: FileResponse | undefined;
   @ApiProperty({
-    enum: Constants.Application.ApplicationStatuses,
+    enum: CONSTANTS.Application.ApplicationStatuses,
   })
-  status: Constants.Application.ApplicationStatuses;
+  status: CONSTANTS.Application.ApplicationStatuses;
   @ApiProperty()
   URL: string;
 

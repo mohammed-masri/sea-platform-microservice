@@ -1,12 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Constants } from 'src/config';
-import { IPermission } from 'src/config/constants/permission';
+import { CONSTANTS, DTO } from 'sea-platform-helpers';
 
 export class PermissionResponse {
   @ApiProperty()
   name: string;
   @ApiProperty()
-  key: Constants.Permission.PermissionKeys;
+  key: CONSTANTS.Permission.PermissionKeys;
 
   @ApiProperty({ type: Boolean })
   isLeaf: boolean;
@@ -14,7 +13,10 @@ export class PermissionResponse {
   @ApiProperty({ type: PermissionResponse, isArray: true, nullable: true })
   children: PermissionResponse[] | undefined;
 
-  constructor(permission: IPermission, children: PermissionResponse[]) {
+  constructor(
+    permission: DTO.Permission.IPermission,
+    children: PermissionResponse[],
+  ) {
     this.name = permission.name;
     this.key = permission.key;
     this.children = children;
@@ -43,7 +45,7 @@ export class PermissionResponseForRole {
   @ApiProperty()
   name: string;
   @ApiProperty()
-  key: Constants.Permission.PermissionKeys;
+  key: CONSTANTS.Permission.PermissionKeys;
 
   @ApiProperty({ type: Boolean })
   isLeaf: boolean;
@@ -55,7 +57,7 @@ export class PermissionResponseForRole {
   children: PermissionResponseForRole[] | undefined;
 
   constructor(
-    permission: IPermission,
+    permission: DTO.Permission.IPermission,
     children: PermissionResponseForRole[],
     checked: PermissionChecked,
   ) {

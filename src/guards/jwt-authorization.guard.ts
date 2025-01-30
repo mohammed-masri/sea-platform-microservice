@@ -6,27 +6,26 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { Common } from 'sea-platform-helpers';
-import { Constants } from 'src/config';
+import { CONSTANTS, DTO } from 'sea-platform-helpers';
 
 @Injectable()
 export class JWTAuthorizationGuard implements CanActivate {
   constructor(
-    private readonly acceptedPermissionKeys: Constants.Permission.PermissionKeys[],
+    private readonly acceptedPermissionKeys: CONSTANTS.Permission.PermissionKeys[],
     private readonly validationStrategy: 'all' | 'some' | 'one' = 'all', // Default strategy
   ) {}
 
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request: Common.DTO.AuthorizedRequest & Request = context
+    const request: DTO.Request.AuthorizedRequest & Request = context
       .switchToHttp()
       .getRequest();
 
     const { permissionKeys } = request.context;
 
     const authorized = this.validatePermissions(
-      permissionKeys as Constants.Permission.PermissionKeys[],
+      permissionKeys as CONSTANTS.Permission.PermissionKeys[],
     );
 
     if (!authorized)
@@ -41,7 +40,7 @@ export class JWTAuthorizationGuard implements CanActivate {
   }
 
   private validatePermissions(
-    accountPermissionKeys: Constants.Permission.PermissionKeys[],
+    accountPermissionKeys: CONSTANTS.Permission.PermissionKeys[],
   ): boolean {
     switch (this.validationStrategy) {
       case 'all':

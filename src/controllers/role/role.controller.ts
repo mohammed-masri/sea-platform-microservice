@@ -20,7 +20,6 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { Constants } from 'src/config';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
 import { JWTAuthGuard } from 'src/guards/jwt-authentication.guard';
 import { RoleService } from 'src/models/role/role.service';
@@ -34,12 +33,13 @@ import { RoleFullResponse, RoleShortResponse } from 'src/models/role/role.dto';
 import { RolePermission } from 'src/models/role-permission/role-permission.model';
 import { JWTAuthorizationGuard } from 'src/guards/jwt-authorization.guard';
 import { Account } from 'src/models/account/account.model';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Controller('roles')
 @ApiTags('Internal', 'Role')
 @UseGuards(
   JWTAuthGuard,
-  new CheckAccountTypeGuard(Constants.Account.AccountTypes.Admin),
+  new CheckAccountTypeGuard(CONSTANTS.Account.AccountTypes.Admin),
 )
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
@@ -47,7 +47,7 @@ export class RoleController {
   @Post()
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageRolesCreate,
+      CONSTANTS.Permission.PermissionKeys.ManageRolesCreate,
     ]),
   )
   @ApiOperation({ summary: 'Create a new role' })
@@ -65,7 +65,7 @@ export class RoleController {
   @Get()
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageRolesRead,
+      CONSTANTS.Permission.PermissionKeys.ManageRolesRead,
     ]),
   )
   @ApiOperation({ summary: 'fetch roles' })
@@ -88,7 +88,7 @@ export class RoleController {
   @Get('/:id')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageRolesRead,
+      CONSTANTS.Permission.PermissionKeys.ManageRolesRead,
     ]),
   )
   @ApiOperation({ summary: 'get role details' })
@@ -114,7 +114,7 @@ export class RoleController {
   @Put('/:id')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageRolesUpdateDetails,
+      CONSTANTS.Permission.PermissionKeys.ManageRolesUpdateDetails,
     ]),
   )
   @ApiOperation({ summary: 'update role details' })
@@ -145,7 +145,7 @@ export class RoleController {
   @Delete('/:id')
   @UseGuards(
     new JWTAuthorizationGuard([
-      Constants.Permission.PermissionKeys.ManageRolesDelete,
+      CONSTANTS.Permission.PermissionKeys.ManageRolesDelete,
     ]),
   )
   @ApiOperation({ summary: 'delete role (force delete)' })

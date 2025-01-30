@@ -8,8 +8,9 @@ import {
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
-import { Constants } from 'src/config';
 import { File } from '../file/file.model';
+import { CONSTANTS } from 'sea-platform-helpers';
+
 @Table({
   tableName: 'applications', // Set table name if different from model name
   timestamps: true, // Automatically adds createdAt and updatedAt timestamps
@@ -38,14 +39,14 @@ export class Application extends Model {
   })
   URL: string;
 
-  @Default(Constants.Application.ApplicationStatuses.Unavailable)
+  @Default(CONSTANTS.Application.ApplicationStatuses.Unavailable)
   @Column({
     type: DataType.ENUM(
-      ...Object.values(Constants.Application.ApplicationStatuses),
+      ...Object.values(CONSTANTS.Application.ApplicationStatuses),
     ),
     allowNull: false,
   })
-  status: Constants.Application.ApplicationStatuses;
+  status: CONSTANTS.Application.ApplicationStatuses;
 
   @ForeignKey(() => File)
   @Column({

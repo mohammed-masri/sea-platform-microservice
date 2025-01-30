@@ -8,11 +8,11 @@ import {
   HasMany,
   BelongsToMany,
 } from 'sequelize-typescript';
-import { Constants } from 'src/config';
 import { Account } from '../account/account.model';
 import { AccountRoles } from '../account-role/account-role.model';
 import { AccountPermission } from '../account-permission/account-permission.model';
 import { RolePermission } from '../role-permission/role-permission.model';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Table({
   tableName: 'roles', // Set table name if different from model name
@@ -43,10 +43,10 @@ export class Role extends Model {
   color: string;
 
   @Column({
-    type: DataType.ENUM(...Object.values(Constants.Account.AccountTypes)),
+    type: DataType.ENUM(...Object.values(CONSTANTS.Account.AccountTypes)),
     allowNull: false,
   })
-  type: Constants.Account.AccountTypes;
+  type: CONSTANTS.Account.AccountTypes;
 
   @BelongsToMany(() => Account, () => AccountRoles)
   accounts: Account[];

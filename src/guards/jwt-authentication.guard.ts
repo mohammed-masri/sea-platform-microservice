@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { Common } from 'sea-platform-helpers';
+import { DTO } from 'sea-platform-helpers';
 
 import { ServerConfigService } from 'src/models/server-config/server-config.service';
 
@@ -21,7 +21,7 @@ export class JWTAuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request: Common.DTO.AuthorizedRequest & Request = context
+    const request: DTO.Request.AuthorizedRequest & Request = context
       .switchToHttp()
       .getRequest();
 

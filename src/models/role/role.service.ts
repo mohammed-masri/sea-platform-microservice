@@ -15,6 +15,7 @@ import { Account } from '../account/account.model';
 import { RolePermissionService } from '../role-permission/role-permission.service';
 import { AccountPermissionService } from '../account-permission/account-permission.service';
 import { Sequelize } from 'sequelize-typescript';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Injectable()
 export class RoleService {
@@ -57,7 +58,7 @@ export class RoleService {
   async update(
     role: Role,
     data: Attributes<Role>,
-    permissionKeys: Constants.Permission.PermissionKeys[],
+    permissionKeys: CONSTANTS.Permission.PermissionKeys[],
   ) {
     role = await role.update({ ...data });
 
@@ -161,7 +162,7 @@ export class RoleService {
     page: number,
     limit: number,
     q: string,
-    accountType: Constants.Account.AccountTypes | 'all',
+    accountType: CONSTANTS.Account.AccountTypes | 'all',
   ) {
     const where: WhereOptions<Role> = {};
     if (accountType !== 'all') where['type'] = accountType;
@@ -191,9 +192,9 @@ export class RoleService {
     const permissionKeys = rolePermissions.map((p) => p.permissionKey);
 
     const PERMISSIONS =
-      role.type === Constants.Account.AccountTypes.Admin
-        ? Constants.Permission.ADMIN_PERMISSIONS
-        : Constants.Permission.USER_PERMISSIONS;
+      role.type === CONSTANTS.Account.AccountTypes.Admin
+        ? CONSTANTS.Permission.ADMIN_PERMISSIONS
+        : CONSTANTS.Permission.USER_PERMISSIONS;
 
     const permissionsResponse = await Promise.all(
       PERMISSIONS.map((permission) =>

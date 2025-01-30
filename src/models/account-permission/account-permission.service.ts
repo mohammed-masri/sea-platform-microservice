@@ -6,6 +6,7 @@ import { AccountPermission } from './account-permission.model';
 import { PermissionService } from '../permission/permission.service';
 import { Account } from '../account/account.model';
 import { Role } from '../role/role.model';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Injectable()
 export class AccountPermissionService {
@@ -37,7 +38,7 @@ export class AccountPermissionService {
   async updateKeysForAccount(
     account: Account,
     role: Role,
-    newKeys: Constants.Permission.PermissionKeys[],
+    newKeys: CONSTANTS.Permission.PermissionKeys[],
   ) {
     await this.permissionService.checkAreLeafKeys(newKeys);
 

@@ -11,6 +11,6 @@ export class ServerConfigService {
   }
 
   getServerEnvironment() {
-    return this.get<CONSTANTS.Environments | undefined>('NODE_ENV');
+    return this.get<CONSTANTS.Server.Environments | undefined>('NODE_ENV');
   }
 }

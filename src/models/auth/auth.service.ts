@@ -3,13 +3,14 @@ import { JwtService } from '@nestjs/jwt';
 
 import { AccountService } from '../account/account.service';
 import { LoginDto, MicrosoftLoginDto } from 'src/controllers/auth/auth.dto';
-import { Utils } from 'sea-platform-helpers';
-import { Constants, JWTConfig } from 'src/config';
+import { CONSTANTS } from 'sea-platform-helpers';
+import { JWTConfig } from 'src/config';
 import { LoginResponse } from './auth.dto';
 import { AccountFullResponse } from '../account/account.dto';
 import { Op } from 'sequelize';
 import { MicrosoftAuthService } from '../microsoft-auth/microsoft-auth.service';
 import { ServerConfigService } from '../server-config/server-config.service';
+import { BcryptUtils } from 'src/utils';
 
 @Injectable()
 export class AuthService {
@@ -54,7 +55,7 @@ export class AuthService {
 
     if (!account) throw new UnauthorizedException('Invalid credentials');
 
-    const isCorrect = await Utils.Bcrypt.comparePassword(
+    const isCorrect = await BcryptUtils.comparePassword(
       password,
       account?.password,
     );
@@ -90,7 +91,7 @@ export class AuthService {
         {
           name,
           email,
-          type: Constants.Account.AccountTypes.User,
+          type: CONSTANTS.Account.AccountTypes.User,
         },
         [],
       );

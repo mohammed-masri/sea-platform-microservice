@@ -17,7 +17,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { Constants } from 'src/config';
 import { JWTAuthGuard } from 'src/guards/jwt-authentication.guard';
 import { CheckAccountTypeGuard } from 'src/guards/check-account-type.guard';
 
@@ -27,12 +26,13 @@ import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
 import { FileService } from 'src/models/file/file.service';
 import { FileResponse } from 'src/models/file/file.dto';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Controller('file-manager')
 @ApiTags('Internal', 'File Manger')
 @UseGuards(
   JWTAuthGuard,
-  new CheckAccountTypeGuard(Constants.Account.AccountTypes.Admin),
+  new CheckAccountTypeGuard(CONSTANTS.Account.AccountTypes.Admin),
 )
 export class FileManagerController {
   constructor(private readonly fileService: FileService) {}

@@ -4,6 +4,7 @@ import { OTP } from './otp.model';
 import { Attributes, FindOptions } from 'sequelize';
 import { Utils } from 'sea-platform-helpers';
 import { Account } from '../account/account.model';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Injectable()
 export class OTPService {
@@ -24,14 +25,14 @@ export class OTPService {
     const otpCode = Utils.String.generateRandomString();
 
     const expiresAt = new Date(
-      Date.now() + Constants.OTP.OTPExpiresAfterXMinutes * 60 * 1000,
+      Date.now() + CONSTANTS.OTP.OTPExpiresAfterXMinutes * 60 * 1000,
     );
 
     const otp = await this.findByIdentifier(identifier);
     if (otp) {
       otp.otpCode = otpCode;
       otp.expiresAt = expiresAt;
-      otp.remainingTries = Constants.OTP.NumberOfTries;
+      otp.remainingTries = CONSTANTS.OTP.NumberOfTries;
       otp.accountId = account?.id || null;
       return await otp.save();
     } else {

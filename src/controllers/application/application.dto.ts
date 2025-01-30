@@ -7,8 +7,8 @@ import {
   MaxLength,
 } from 'class-validator';
 import { ArrayDataResponse, FindAllDto } from 'src/common/global.dto';
-import { Constants } from 'src/config';
 import { ApplicationResponse } from 'src/models/application/application.dto';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 export class CreateApplicationDto {
   @ApiProperty({
@@ -79,19 +79,19 @@ export class UpdateApplicationDto {
 
   @ApiProperty({
     required: true,
-    enum: Constants.Application.ApplicationStatuses,
+    enum: CONSTANTS.Application.ApplicationStatuses,
   })
-  @IsIn([...Object.values(Constants.Application.ApplicationStatuses)])
-  status: Constants.Application.ApplicationStatuses;
+  @IsIn([...Object.values(CONSTANTS.Application.ApplicationStatuses)])
+  status: CONSTANTS.Application.ApplicationStatuses;
 }
 
 export class UpdateApplicationStatusDto {
   @ApiProperty({
     description: 'The status of the application',
-    enum: Constants.Application.ApplicationStatuses,
+    enum: CONSTANTS.Application.ApplicationStatuses,
   })
-  @IsIn([...Object.values(Constants.Application.ApplicationStatuses)])
-  status: Constants.Application.ApplicationStatuses;
+  @IsIn([...Object.values(CONSTANTS.Application.ApplicationStatuses)])
+  status: CONSTANTS.Application.ApplicationStatuses;
 }
 
 export class FindAllApplicationsDto extends FindAllDto {
@@ -99,11 +99,11 @@ export class FindAllApplicationsDto extends FindAllDto {
     required: true,
     type: String,
     description: 'the application status',
-    enum: Constants.Application.ApplicationStatuses,
+    enum: CONSTANTS.Application.ApplicationStatuses,
   })
-  @IsIn([...Object.values(Constants.Application.ApplicationStatuses), 'all'])
+  @IsIn([...Object.values(CONSTANTS.Application.ApplicationStatuses), 'all'])
   @IsOptional()
-  status: Constants.Application.ApplicationStatuses | 'all';
+  status: CONSTANTS.Application.ApplicationStatuses | 'all';
 }
 
 export class ApplicationArrayDataResponse extends ArrayDataResponse<ApplicationResponse> {

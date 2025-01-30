@@ -8,6 +8,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { ApplicationArrayDataResponse } from 'src/controllers/application/application.dto';
 import { File } from '../file/file.model';
 import { FileService } from '../file/file.service';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Injectable()
 export class ApplicationService {
@@ -73,7 +74,7 @@ export class ApplicationService {
   }
   async updateStatus(
     application: Application,
-    status: Constants.Application.ApplicationStatuses,
+    status: CONSTANTS.Application.ApplicationStatuses,
   ) {
     application.status = status;
     return await application.save();
@@ -114,7 +115,7 @@ export class ApplicationService {
     page: number,
     limit: number,
     q: string,
-    status: Constants.Application.ApplicationStatuses | 'all',
+    status: CONSTANTS.Application.ApplicationStatuses | 'all',
   ) {
     const where: WhereOptions<Application> = {};
     if (status !== 'all') where['status'] = status;

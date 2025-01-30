@@ -5,6 +5,7 @@ import { RolePermission } from './role-permission.model';
 import { Attributes, Op } from 'sequelize';
 import { PermissionService } from '../permission/permission.service';
 import { Role } from '../role/role.model';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Injectable()
 export class RolePermissionService {
@@ -57,7 +58,7 @@ export class RolePermissionService {
 
   async updateKeysForRole(
     role: Role,
-    newKeys: Constants.Permission.PermissionKeys[],
+    newKeys: CONSTANTS.Permission.PermissionKeys[],
   ) {
     await this.permissionService.checkAreLeafKeys(newKeys);
 

@@ -9,6 +9,7 @@ import {
 } from 'sequelize-typescript';
 import { Constants } from 'src/config';
 import { Role } from '../role/role.model';
+import { CONSTANTS } from 'sea-platform-helpers';
 
 @Table({
   tableName: 'role-permissions', // Set table name if different from model name
@@ -25,8 +26,8 @@ export class RolePermission extends Model {
   roleId: string;
 
   @Column({
-    type: DataType.ENUM(...Object.values(Constants.Permission.PermissionKeys)),
+    type: DataType.ENUM(...Object.values(CONSTANTS.Permission.PermissionKeys)),
     allowNull: false,
   })
-  permissionKey: Constants.Permission.PermissionKeys;
+  permissionKey: CONSTANTS.Permission.PermissionKeys;
 }

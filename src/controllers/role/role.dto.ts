@@ -11,21 +11,21 @@ import {
 } from 'class-validator';
 import { ArrayDataResponse, FindAllDto } from 'src/common/global.dto';
 import { IsArrayValuesIn } from 'src/decorators/is-array-values-in.decorator';
-import { Constants } from 'src/config';
 import { RoleShortResponse } from 'src/models/role/role.dto';
+import { CONSTANTS } from 'sea-platform-helpers';
 
-const permissionKeys = [...Object.values(Constants.Permission.PermissionKeys)];
+const permissionKeys = [...Object.values(CONSTANTS.Permission.PermissionKeys)];
 
 export class FindAllRolesDto extends FindAllDto {
   @ApiProperty({
     required: false,
     type: String,
     description: 'the roles account type (nothing means all)',
-    enum: Constants.Account.AccountTypes,
+    enum: CONSTANTS.Account.AccountTypes,
   })
-  @IsIn([...Object.values(Constants.Account.AccountTypes), 'all'])
+  @IsIn([...Object.values(CONSTANTS.Account.AccountTypes), 'all'])
   @IsOptional()
-  accountType: Constants.Account.AccountTypes | 'all';
+  accountType: CONSTANTS.Account.AccountTypes | 'all';
 }
 
 export class CreateRoleDto {
@@ -65,10 +65,10 @@ export class CreateRoleDto {
   permissionKeys: string[];
 
   @ApiProperty({
-    enum: Constants.Account.AccountTypes,
+    enum: CONSTANTS.Account.AccountTypes,
   })
-  @IsEnum(Constants.Account.AccountTypes)
-  type: Constants.Account.AccountTypes;
+  @IsEnum(CONSTANTS.Account.AccountTypes)
+  type: CONSTANTS.Account.AccountTypes;
 }
 
 export class RoleShortArrayDataResponse extends ArrayDataResponse<RoleShortResponse> {
@@ -119,5 +119,5 @@ export class UpdateRoleDto {
   @IsArrayValuesIn(permissionKeys, {
     message: `Each permission must be one of the valid keys: ${permissionKeys.join(', ')}`,
   })
-  permissionKeys: Constants.Permission.PermissionKeys[];
+  permissionKeys: CONSTANTS.Permission.PermissionKeys[];
 }
